@@ -12,58 +12,67 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path="/player")
+@RequestMapping(path = "/players")
 public class PlayerController {
-//    see all his records, teams, joining to teams
-//    create a team and become a team manager
-//    team members can see schedule
 
     private final PlaygroundService playgroundService;
 
-    @PostMapping(value = "/record/make", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> makeBookingRecord(@RequestBody BookingRecordDTO newRecord) {
-        String login = newRecord.getLogin();
-//              teamService.addUserToTeam(teamId, userId) (if (team.is_free_to_join && team.size < team.MAX_SIZE) )
-//              check result
+    @PostMapping(value = "/{playerId}/record", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> makeBookingRecord(@PathVariable long playerId, @RequestBody BookingRecordDTO newRecord) {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/team/join")
-    public ResponseEntity<?> joinTeam(@RequestParam int teamId, @RequestParam String login) {
-//              teamService.addUserToTeam(teamId, userId) (if (team.is_free_to_join && team.size < team.MAX_SIZE) )
-//              check result
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-
-    @PostMapping(value = "/team/create", consumes = "application/json")
-    public ResponseEntity<?> createTeam(@RequestBody TeamDTO teamDTO) {
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @DeleteMapping(value = "/record/cancel", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> deleteBookingRecord(@RequestBody BookingRecordDTO newRecord) {
-        String login = newRecord.getLogin();
-//              teamService.addUserToTeam(teamId, userId) (if (team.is_free_to_join && team.size < team.MAX_SIZE) )
-//              check result
+    @DeleteMapping(value = "/{playerId}/record", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> deleteBookingRecord(@PathVariable long playerId, @RequestBody BookingRecordDTO newRecord) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/team/quit")
-    public ResponseEntity<?> quitTeam(@RequestParam int teamId, @RequestParam String login) {
-//              teamService.addUserToTeam(teamId, userId) (if (team.is_free_to_join && team.size < team.MAX_SIZE) )
-//              check result
+    @PutMapping(value = "/{playerId}/record", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> changeBookingRecord(@PathVariable long playerId, @RequestBody BookingRecordDTO newRecord) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/records")
-    public List<BookingRecordDTO> getUserRecords() {
+    @GetMapping(value = "{userId}/records")
+    public List<BookingRecordDTO> getUserRecords(@PathVariable long userId) {
         return playgroundService.getBookingRecordsByUser("me");
     }
 
-    @GetMapping(value = "/teams")
-    public List<Long> getAllUserJoinedTeams(@RequestParam String login) {
-        return playgroundService.getUserTeamsIds(login);
+    @PostMapping(value = "{playerId}/teams/{teamId}")
+    public ResponseEntity<?> joinTeam(@PathVariable long teamId, @PathVariable long playerId) {
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
+    @DeleteMapping(value = "{playerId}/teams/{teamId}")
+    public ResponseEntity<?> leaveTeam(@PathVariable long teamId, @PathVariable long playerId) {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/{playerId}/teams/new", consumes = "application/json")
+    public ResponseEntity<?> createTeam(@PathVariable long playerId, @RequestBody TeamDTO teamDTO) {
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping(value = "/{playerId}/teams")
+    public List<Long> getPlayerJoinedTeams(@PathVariable long playerId) {
+        return playgroundService.getUserTeamsIds(playerId);
+    }
+
+    @GetMapping(value = "/")
+    public List<Long> getPlayersByName(@RequestParam String name) {
+        return null;
+    }
+
+
+    @GetMapping(value = "/")
+    public List<Long> getPlayersByAge(@RequestParam int age) {
+        return null;
+    }
+
+//    @GetMapping(value = "/")
+//    public List<Long> getPlayersByAnotherFilter(@RequestParam int age) {
+////        return playgroundService.getUserTeamsIds(playerId);
+//        return null;
+//    }
 
 
 }

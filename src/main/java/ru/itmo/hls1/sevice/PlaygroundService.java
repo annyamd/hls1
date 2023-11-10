@@ -47,7 +47,7 @@ public class PlaygroundService {
         return bookingRecords;
     }
 
-    public List<Long> getUserTeamsIds(String login) {
+    public List<Long> getUserTeamsIds(long id) {
         List<Long> teams = new ArrayList<>();
         teams.add(1L);
         teams.add(35345L);
