@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class PlaygroundDetailsDTO {
     private PlaygroundDTO playground;
+//    private PlaygroundAvailabilityDTO availability;
 //    private ... available time, booking, sport
 }

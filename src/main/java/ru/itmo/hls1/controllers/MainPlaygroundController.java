@@ -11,24 +11,23 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(path="/playgrounds")
 public class MainPlaygroundController {
 
-    private PlaygroundService playgroundService;
+    private final PlaygroundService playgroundService;
 
-    @Autowired
-    public MainPlaygroundController(PlaygroundService playgroundService) {
-        this.playgroundService = playgroundService;
-    }
-
-    @GetMapping(value = "/playgrounds")
+    @GetMapping(value = "/")
     public List<PlaygroundDTO> getAllPlaygrounds(){
         return playgroundService.findAllPlaygrounds();
     }
 
-    @GetMapping(value = "/playgrounds/{id}")
+    @GetMapping(value = "/{id}")
     public PlaygroundDetailsDTO getPlaygroundDetails(@PathVariable int id){
 //        pg, availability, booking
         return playgroundService.getPlaygroundDetails(id);
     }
+
+//    get free pgs date?
+
 
 }
