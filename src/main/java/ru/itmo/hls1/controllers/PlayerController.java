@@ -58,15 +58,15 @@ public class PlayerController {
     }
 
     @GetMapping(value = "/")
-    public List<Long> getPlayersByName(@RequestParam String name) {
+    public List<Long> getPlayersWithFilter(@RequestParam String name, @RequestParam int age) {
         return null;
     }
 
 
-    @GetMapping(value = "/")
-    public List<Long> getPlayersByAge(@RequestParam int age) {
-        return null;
-    }
+//    @GetMapping(value = "/")
+//    public List<Long> getPlayersByAge(@RequestParam int age) {
+//        return null;
+//    }
 
 //    @GetMapping(value = "/")
 //    public List<Long> getPlayersByAnotherFilter(@RequestParam int age) {

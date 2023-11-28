@@ -7,31 +7,30 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name=team)
+@Table(name="team")
 public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_id", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private Integer team_id;
 
-    @Column(name = "team_name", nullable = false)
+    @Column(nullable = false)
     private String team_name;
 
-    @Column(name = "team_size", nullable = false)
+    @Column(nullable = false)
     private Integer team_size;
 
-    @Column(name = "free_to_join_team", nullable = false)
-    private Boolean join_team;
+    @Column(nullable = false)
+    private Boolean is_free_to_join;
 
-
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "teams")
-    private Collection<Player> players;
-
-    @OneToOne(mappedBy = "team", orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "captain_id", referencedColumnName = "player_id")
-    private Player player;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private TeamManager manager;
+//    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "teams")
+//    private Collection<Player> players;
+//
+//    @OneToOne(orphanRemoval = true, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "captain_id", referencedColumnName = "player_id")
+//    private Player player;
+//
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private TeamManager manager;
 }

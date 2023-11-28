@@ -12,14 +12,14 @@ public class TeamManager {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_manager_id", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private Integer teamManager_id;
 
-    @OneToOne
-    @JoinColumn(name = "player_id", referencedColumnName = "player_id")
-    private Player player;
-
-    @OneToMany
-    @JoinColumn(name = "team_id", referencedColumnName = "team_id")
-    private Collection<Team> teams;
+//    @OneToOne
+//    @JoinColumn(referencedColumnName = "player_id")
+//    private Player player;
+//
+//    @OneToMany
+//    @JoinColumn(referencedColumnName = "team_id")
+//    private Collection<Team> teams;
 }

@@ -12,39 +12,39 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name=player)
+@Table(name="player")
 public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "player_id", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private Integer player_id;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(nullable = false)
     private String lastName;
 
 
-    @Column(name = "age", nullable = false)
+    @Column(nullable = false)
     private Integer age;
 
-    @Column(name = "height_cm", nullable = false)
+    @Column(nullable = false)
     private Float height_cm ;
 
-    @Column(name = "weight_kg", nullable = false)
+    @Column(nullable = false)
     private Float weight_kg ;
 
-    @Column(name = "gender", nullable = false, length = 1)
+    @Column(nullable = false, length = 1)
     private String gender;
 
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User user;
-
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "player_team", joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "team_id"))
-    private Collection<Team> teams;
+//
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+//    private User user;
+//
+//    @ManyToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(name = "player_team", joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "team_id"))
+//    private Collection<Team> teams;
 }

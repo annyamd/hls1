@@ -3,12 +3,14 @@ package ru.itmo.hls1.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name=booking)
+@Table(name="booking")
+@NoArgsConstructor
 public class Booking {
 
     @Id
@@ -21,14 +23,14 @@ public class Booking {
 
     @Column(name = "booking_end_time", unique = true, nullable = false)
     private LocalDateTime endTime;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "teamManager_id", referencedColumnName = "teamManager_id")
-    private TeamManager teamManager;
-
-
-    @OneToOne(mappedBy = "booking", orphanRemoval = true)
-    @JoinColumn(name = "playgroundAvailability_id", referencedColumnName = "playgroundAvailability_id")
-    private PlaygroundAvailability playgroundAvailability;
+//
+//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(name = "teamManager_id", referencedColumnName = "teamManager_id")
+//    private TeamManager teamManager;
+//
+//
+//    @OneToOne(mappedBy = "booking", orphanRemoval = true)
+//    @JoinColumn(name = "playgroundAvailability_id", referencedColumnName = "playgroundAvailability_id")
+//    private PlaygroundAvailability playgroundAvailability;
 
 }

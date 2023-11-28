@@ -3,10 +3,11 @@ package ru.itmo.hls1.sevice;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.itmo.hls1.model.dto.BookingRecordDTO;
-import ru.itmo.hls1.model.dto.PlaygroundDTO;
-import ru.itmo.hls1.model.dto.PlaygroundDetailsDTO;
-import ru.itmo.hls1.model.dto.TeamDTO;
+import ru.itmo.hls1.model.dto.*;
+import ru.itmo.hls1.model.entity.Playground;
+import ru.itmo.hls1.model.entity.PlaygroundAvailability;
+import ru.itmo.hls1.repository.PlaygroundAvailabilityRepository;
+import ru.itmo.hls1.repository.PlaygroundRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,17 +17,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaygroundService {
 
-    public List<PlaygroundDTO> findAllPlaygrounds(){
-        List<PlaygroundDTO> list = new ArrayList<>();
-        list.add(new PlaygroundDTO(0, "Name 0", "Location 0"));
-        list.add(new PlaygroundDTO(1, "Name 1", "Location 1"));
-        list.add(new PlaygroundDTO(2, "Name 2", "Location 2"));
-        return list;
+    private final PlaygroundRepository playgroundRepository;
+    private final PlaygroundAvailabilityRepository pgAvailabilityRepository;
+
+    public List<Playground> findAllPlaygrounds(){
+        List<Playground> target = new ArrayList<>();
+        playgroundRepository.findAll().forEach(target::add);
+        return target;
     }
 
-    public PlaygroundDetailsDTO getPlaygroundDetails(int id) {
-        //        get from repository and return info in PlaygroundDetailsDTO object
-        return new PlaygroundDetailsDTO(new PlaygroundDTO(1, "Moscow, Street", "Sport center"));
+    public Playground getPlayground(Long id) {
+        return playgroundRepository.findById(id).orElse(null);
+    }
+
+    public PlaygroundAvailability getPlaygroundDetails(Long id) {
+        return pgAvailabilityRepository.findPlaygroundAvailabilityByPlayground_id(id);
     }
 
     public List<BookingRecordDTO> getBookingRecordsByUser(String login) {
