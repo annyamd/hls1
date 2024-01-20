@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.itmo.hls1.model.dto.BookingRecordDTO;
 import ru.itmo.hls1.model.dto.TeamDTO;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/teams")
@@ -15,34 +17,55 @@ public class TeamController {
 //  change booking for his team
 //  creates team (choosing players from list) and removing, make booking
 
+// get teams of created by user and get teams user is joined
+//if chosen team made by team manager
+
+    @GetMapping(value = "/")
+    public ResponseEntity<?> getAllTeams(@RequestParam(value = "page", defaultValue = "0") int page,
+                                           @RequestParam(value = "size", defaultValue = "10") int size) {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping(value="/{teamId}")
     public ResponseEntity<?> getTeamById(@PathVariable long teamId) {
-//        if chosen team made by team manager
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value="user/{userId}")
-    public ResponseEntity<?> getTeams(@PathVariable long userId) {
-//        if chosen team made by team manager
+    @PostMapping(value = "/")
+    public ResponseEntity<?> createTeam(@RequestBody TeamDTO teamDTO) {
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "/{teamId}")
+    public ResponseEntity<?> deleteTeam(@PathVariable long teamId) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/delete")
-    public ResponseEntity<?> createTeam(@RequestParam long teamId, @RequestParam long requestId) {
-//        if chosen team made by team manager
+    @PutMapping(value = "/{teamId}")
+    public ResponseEntity<?> updateTeam(@PathVariable long teamId, @RequestBody TeamDTO teamDTO) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/update")
-    public ResponseEntity<?> updateTeamInfo(@RequestParam long teamId, @RequestBody TeamDTO teamDTO) {
-//        if chosen team made by team manager
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/add_player/{id}")
-    public ResponseEntity<?> addTeamPlayer(@PathVariable long id, @RequestBody TeamDTO teamDTO) {
-//        if chosen team made by team manager
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PutMapping(value = "/add_player/{id}")
+//    public ResponseEntity<?> addTeamPlayer(@PathVariable long id, @RequestBody TeamDTO teamDTO) {
+////        if chosen team made by team manager
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//
+//    @PostMapping(value = "{playerId}/teams/{teamId}")
+//    public ResponseEntity<?> joinTeam(@PathVariable long teamId, @PathVariable long playerId) {
+//        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+//    }
+//
+//    @DeleteMapping(value = "{playerId}/teams/{teamId}")
+//    public ResponseEntity<?> leaveTeam(@PathVariable long teamId, @PathVariable long playerId) {
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//    @GetMapping(value = "/{playerId}/teams")
+//    public List<Long> getPlayerJoinedTeams(@PathVariable long playerId) {
+//        return playgroundService.getUserTeamsIds(playerId);
+//    }
 
 }
