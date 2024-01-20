@@ -1,5 +1,6 @@
 package ru.itmo.hls1.model.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -7,4 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class TeamDTO {
     private long teamId;
+    private String teamName;
+    private long teamManagerId;
+    private int teamSize;
+    private boolean isFreeToJoin;
 }

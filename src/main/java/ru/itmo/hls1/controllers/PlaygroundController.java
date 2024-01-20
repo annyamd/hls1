@@ -4,15 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.itmo.hls1.model.dto.PlayerDto;
-import ru.itmo.hls1.model.dto.PlaygroundAvailabilityDTO;
 import ru.itmo.hls1.model.dto.PlaygroundDTO;
-import ru.itmo.hls1.model.entity.Playground;
-import ru.itmo.hls1.model.entity.PlaygroundAvailability;
 import ru.itmo.hls1.sevice.PlaygroundService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

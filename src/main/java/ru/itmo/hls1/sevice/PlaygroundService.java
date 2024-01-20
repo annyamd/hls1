@@ -1,6 +1,5 @@
 package ru.itmo.hls1.sevice;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.itmo.hls1.model.dto.*;
@@ -34,18 +33,18 @@ public class PlaygroundService {
         return pgAvailabilityRepository.findPlaygroundAvailabilityByPlayground_id(id);
     }
 
-    public List<BookingRecordDTO> getBookingRecordsByUser(String login) {
+    public List<BookingDTO> getBookingRecordsByUser(String login) {
 //        get from repository
-        List<BookingRecordDTO> bookingRecords = new ArrayList<>();
-        bookingRecords.add(new BookingRecordDTO(login, 1,
+        List<BookingDTO> bookingRecords = new ArrayList<>();
+        bookingRecords.add(new BookingDTO(login, 1,
                 LocalDateTime.of(2023, 11, 21, 11, 0),
                 LocalDateTime.of(2023, 11, 21, 12, 0)));
 
-        bookingRecords.add(new BookingRecordDTO(login, 1,
+        bookingRecords.add(new BookingDTO(login, 1,
                 LocalDateTime.of(2023, 11, 21, 16, 0),
                 LocalDateTime.of(2023, 11, 21, 17, 0)));
 
-        bookingRecords.add(new BookingRecordDTO(login, 1,
+        bookingRecords.add(new BookingDTO(login, 1,
                 LocalDateTime.of(2023, 11, 23, 14, 0),
                 LocalDateTime.of(2023, 11, 23, 15, 0)));
 //

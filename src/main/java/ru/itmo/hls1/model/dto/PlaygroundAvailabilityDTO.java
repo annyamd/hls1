@@ -3,17 +3,14 @@ package ru.itmo.hls1.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
 public class PlaygroundAvailabilityDTO {
-    private Long id;
-
+    private long id;
     private Boolean availability;
-
-    private LocalDateTime available_from;
-
-    private LocalDateTime available_to;
-
-    private PlaygroundDTO playground;
+    private LocalTime availableFrom;
+    private LocalTime availableTo;
+    private int capacity;
 }

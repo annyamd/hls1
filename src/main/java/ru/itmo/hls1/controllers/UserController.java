@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.itmo.hls1.model.dto.TeamDTO;
-import ru.itmo.hls1.model.dto.UserDto;
+import ru.itmo.hls1.model.dto.UserDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class UserController {
 
 //    supervisor only
     @PostMapping(value = "/")
-    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDto) {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

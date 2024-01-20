@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.itmo.hls1.model.dto.TeamDTO;
-import ru.itmo.hls1.model.dto.TeamManagerDto;
+import ru.itmo.hls1.model.dto.TeamManagerDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class TeamManagerController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<?> createTeamManager(@RequestBody TeamManagerDto managerDto) {
+    public ResponseEntity<?> createTeamManager(@RequestBody TeamManagerDTO managerDto) {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -34,7 +33,7 @@ public class TeamManagerController {
     }
 
     @PutMapping(value = "/{managerId}")
-    public ResponseEntity<?> updateTeamManager(@PathVariable long managerId, @RequestBody TeamManagerDto managerDto) {
+    public ResponseEntity<?> updateTeamManager(@PathVariable long managerId, @RequestBody TeamManagerDTO managerDto) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

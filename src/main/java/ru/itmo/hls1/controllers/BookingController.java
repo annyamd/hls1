@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.itmo.hls1.model.dto.BookingRecordDTO;
+import ru.itmo.hls1.model.dto.BookingDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -12,7 +12,7 @@ import ru.itmo.hls1.model.dto.BookingRecordDTO;
 public class BookingController {
 
     @PostMapping(value = "/")
-    public ResponseEntity<?> createBookingRecord(@RequestBody BookingRecordDTO newRecord) {
+    public ResponseEntity<?> createBookingRecord(@RequestBody BookingDTO newRecord) {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -33,7 +33,7 @@ public class BookingController {
     }
 
     @PutMapping(value = "/{recordId}")
-    public ResponseEntity<?> updateBookingRecord(@PathVariable long recordId, @RequestBody BookingRecordDTO record) {
+    public ResponseEntity<?> updateBookingRecord(@PathVariable long recordId, @RequestBody BookingDTO record) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

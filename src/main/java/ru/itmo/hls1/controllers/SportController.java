@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.itmo.hls1.model.dto.SportDto;
+import ru.itmo.hls1.model.dto.SportDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class SportController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<?> createSport(@RequestBody SportDto sportDto) {
+    public ResponseEntity<?> createSport(@RequestBody SportDTO sportDto) {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
