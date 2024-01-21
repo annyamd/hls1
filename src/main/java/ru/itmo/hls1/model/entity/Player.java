@@ -2,8 +2,7 @@ package ru.itmo.hls1.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Table 'player' contains data about users that are players t.e. user that has a team.
@@ -12,39 +11,42 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name="player")
+@Table(name = "player")
 public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
+    @Column(name = "player_id")
     private Integer player_id;
 
-    @Column(nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-
-    @Column(nullable = false)
+    @Column(name = "age", nullable = false)
     private Integer age;
 
-    @Column(nullable = false)
-    private Float height_cm ;
+    @Column(name = "height_cm", nullable = false)
+    private Float height;
 
-    @Column(nullable = false)
-    private Float weight_kg ;
+    @Column(name = "weight_kg", nullable = false)
+    private Float weight;
 
-    @Column(nullable = false, length = 1)
+    @Column(name = "gender", nullable = false, length = 1)
     private String gender;
 
-//
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-//    private User user;
-//
-//    @ManyToMany(cascade = CascadeType.PERSIST)
-//    @JoinTable(name = "player_team", joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "team_id"))
-//    private Collection<Team> teams;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "players_teams",
+            joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "team_id"))
+    private List<Team> teams;
+
+    @OneToMany(mappedBy = "player")
+    private List<Booking> bookingList;
 }

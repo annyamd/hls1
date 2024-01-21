@@ -3,34 +3,34 @@ package ru.itmo.hls1.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name="team")
+@Table(name = "team")
 public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Integer team_id;
+    @Column(name = "team_id")
+    private long teamId;
 
-    @Column(nullable = false)
-    private String team_name;
+    @Column(name = "team_name", nullable = false)
+    private String teamName;
 
-    @Column(nullable = false)
-    private Integer team_size;
+    @Column(name = "team_size", nullable = false)
+    private long teamSize;
 
-    @Column(nullable = false)
-    private Boolean is_free_to_join;
+    @Column(name = "is_free_to_join", nullable = false)
+    private boolean isFreeToJoin;
 
-//    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "teams")
-//    private Collection<Player> players;
-//
-//    @OneToOne(orphanRemoval = true, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "captain_id", referencedColumnName = "player_id")
-//    private Player player;
-//
-//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private TeamManager manager;
+    @ManyToMany(mappedBy = "teams")
+    private List<Player> players;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private TeamManager manager;
+
+    @OneToMany(mappedBy = "team")
+    private List<Booking> bookingList;
 }

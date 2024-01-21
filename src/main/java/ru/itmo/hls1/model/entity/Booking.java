@@ -1,11 +1,14 @@
 package ru.itmo.hls1.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @Entity
@@ -15,22 +18,28 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="booking_id", unique = true, nullable = false)
-    private Long booking_id;
+    @Column(name="booking_id")
+    private long bookingId;
 
-    @Column(name = "booking_start_time", unique = true, nullable = false)
-    private LocalDateTime startTime;
+    @Column(name="date")
+    private LocalDate date;
 
-    @Column(name = "booking_end_time", unique = true, nullable = false)
-    private LocalDateTime endTime;
-//
-//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinColumn(name = "teamManager_id", referencedColumnName = "teamManager_id")
-//    private TeamManager teamManager;
-//
-//
-//    @OneToOne(mappedBy = "booking", orphanRemoval = true)
-//    @JoinColumn(name = "playgroundAvailability_id", referencedColumnName = "playgroundAvailability_id")
-//    private PlaygroundAvailability playgroundAvailability;
+    @Column(name="start_time")
+    private LocalTime startTime;
+
+    @Column(name="end_time")
+    private LocalTime endTime;
+
+    @ManyToOne
+    @JoinColumn(name = "playground_id")
+    private Playground playground;
+
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    private Player player;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
 }

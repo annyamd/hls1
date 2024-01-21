@@ -4,23 +4,20 @@ import jakarta.persistence.*;
 import lombok.Data;
 import ru.itmo.hls1.model.constant.SportType;
 
+import java.util.List;
+
 
 @Data
 @Entity
-@Table(name="sporttype")
+@Table(name = "sport")
 public class Sport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Integer sport_id;
+    @Column(name = "sport_id")
+    private long sportId;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "sport_name", nullable = false)
-    private SportType sportType;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "playground_id", nullable = false)
-    private Playground playground;
+    private String sportName;
 
 }

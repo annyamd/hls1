@@ -2,30 +2,28 @@ package ru.itmo.hls1.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 
 @Data
 @Entity
-@Table(name = "playgroundAvailability")
+@Table(name = "playground_availability")
 public class PlaygroundAvailability {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Long playgroundAvailability_id;
+    @Column(name = "id")
+    private long id;
 
-    @Column(nullable = false)
-    private Boolean availability;
+    @Column(name = "is_available", nullable = false)
+    private boolean isAvailable;
 
-    @Column(unique = true, nullable = false)
-    private LocalDateTime available_from;
+    @Column(name = "available_from", nullable = false)
+    private LocalTime availableFrom;
 
-    @Column(unique = true, nullable = false)
-    private LocalDateTime available_to;
+    @Column(name = "available_to", nullable = false)
+    private LocalTime availableTo;
 
-    @OneToOne
-    @JoinColumn(name = "playground_id", referencedColumnName = "playground_id")
+    @OneToOne(mappedBy = "playgroundAvailability")
     private Playground playground;
 }

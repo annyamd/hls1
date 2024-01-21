@@ -3,7 +3,7 @@ package ru.itmo.hls1.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -12,14 +12,25 @@ public class TeamManager {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Integer teamManager_id;
+    @Column(name = "team_manager_id")
+    private long teamManagerId;
 
-//    @OneToOne
-//    @JoinColumn(referencedColumnName = "player_id")
-//    private Player player;
-//
-//    @OneToMany
-//    @JoinColumn(referencedColumnName = "team_id")
-//    private Collection<Team> teams;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "manager")
+    private List<Team> teams;
 }
