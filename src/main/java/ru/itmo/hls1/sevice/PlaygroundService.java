@@ -33,23 +33,23 @@ public class PlaygroundService {
         return pgAvailabilityRepository.findPlaygroundAvailabilityByPlayground_id(id);
     }
 
-    public List<BookingDTO> getBookingRecordsByUser(String login) {
-//        get from repository
-        List<BookingDTO> bookingRecords = new ArrayList<>();
-        bookingRecords.add(new BookingDTO(login, 1,
-                LocalDateTime.of(2023, 11, 21, 11, 0),
-                LocalDateTime.of(2023, 11, 21, 12, 0)));
-
-        bookingRecords.add(new BookingDTO(login, 1,
-                LocalDateTime.of(2023, 11, 21, 16, 0),
-                LocalDateTime.of(2023, 11, 21, 17, 0)));
-
-        bookingRecords.add(new BookingDTO(login, 1,
-                LocalDateTime.of(2023, 11, 23, 14, 0),
-                LocalDateTime.of(2023, 11, 23, 15, 0)));
+//    public List<BookingDTO> getBookingRecordsByUser(String login) {
+////        get from repository
+//        List<BookingDTO> bookingRecords = new ArrayList<>();
+//        bookingRecords.add(new BookingDTO(login, 1,
+//                LocalDateTime.of(2023, 11, 21, 11, 0),
+//                LocalDateTime.of(2023, 11, 21, 12, 0)));
 //
-        return bookingRecords;
-    }
+//        bookingRecords.add(new BookingDTO(login, 1,
+//                LocalDateTime.of(2023, 11, 21, 16, 0),
+//                LocalDateTime.of(2023, 11, 21, 17, 0)));
+//
+//        bookingRecords.add(new BookingDTO(login, 1,
+//                LocalDateTime.of(2023, 11, 23, 14, 0),
+//                LocalDateTime.of(2023, 11, 23, 15, 0)));
+////
+//        return bookingRecords;
+//    }
 
     public List<Long> getUserTeamsIds(long id) {
         List<Long> teams = new ArrayList<>();

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="0" author="admin">
+        <!--users-->
+        <insert tableName="users">
+            <column name="username" value="user1"/>
+            <column name="password" value="123"/>
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="user2"/>
+            <column name="password" value="abc"/>
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="supervisor1"/>
+            <column name="password" value="qwerty"/>
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="editor1"/>
+            <column name="password" value="123"/>
+        </insert>
+
+        <!--user roles-->
+
+        <insert tableName="user_roles">
+            <column name="role_id" valueComputed="(SELECT role_id FROM role WHERE name='PLAYER')"/>
+            <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='user1')"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="role_id" valueComputed="(SELECT role_id FROM role WHERE name='TEAM_MANAGER')"/>
+            <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='user2')"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="role_id" valueComputed="(SELECT role_id FROM role WHERE name='SUPERVISOR')"/>
+            <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='supervisor1')"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="role_id" valueComputed="(SELECT role_id FROM role WHERE name='EDITOR')"/>
+            <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='editor1')"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

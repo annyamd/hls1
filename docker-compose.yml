@@ -1,0 +1,39 @@
+version: '1.0'
+
+services:
+  db:
+    image: postgres:16.0-alpine
+    container_name: db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d mydb" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+#    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345a
+      - POSTGRES_DB=mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+  liquid:
+    image: liquibase/liquibase
+    container_name: liquid
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      LIQUIBASE_COMMAND_USERNAME: postgres
+      LIQUIBASE_COMMAND_PASSWORD: 12345a
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://192.168.0.103:5432/mydb
+      LIQUIBASE_LOG_LEVEL: WARNING
+    volumes:
+      - ./src/main/resources/db/changelog/:/liquibase/changelog
+      - ./src/main/resources/db/db.changelog-master.xml:/liquibase/db.changelog-master.xml
+    command: --changelog-file db.changelog-master.xml update
+volumes:
+  pg-data:
+
