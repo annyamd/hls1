@@ -12,11 +12,11 @@ services:
       start_period: 10s
 #    restart: unless-stopped
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345a
-      - POSTGRES_DB=mydb
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DATABASE}
     ports:
-      - "5432:5432"
+      - "${PG_PORT}:5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
   liquid:
@@ -28,7 +28,7 @@ services:
     environment:
       LIQUIBASE_COMMAND_USERNAME: postgres
       LIQUIBASE_COMMAND_PASSWORD: 12345a
-      LIQUIBASE_COMMAND_URL: jdbc:postgresql://192.168.0.103:5432/mydb
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://db:5432/mydb
       LIQUIBASE_LOG_LEVEL: WARNING
     volumes:
       - ./src/main/resources/db/changelog/:/liquibase/changelog
