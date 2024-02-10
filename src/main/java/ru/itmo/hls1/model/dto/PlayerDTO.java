@@ -6,12 +6,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PlayerDTO {
-    private long id;
-    private long userId;
+    private Long id;
+    private Long userId;
     private String firstName;
     private String lastName;
-    private int age;
-    private float heightCm;
-    private float weightKg;
+    private Integer age;
+    private Float heightCm;
+    private Float weightKg;
     private String gender;
 }

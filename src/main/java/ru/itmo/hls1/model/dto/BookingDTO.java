@@ -11,10 +11,10 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 public class BookingDTO {
-    private long id;
-    private long playgroundId;
-    private long playerId;
-    private long teamId;
+    private Long id;
+    private Long playgroundId;
+    private Long playerId;
+    private Long teamId;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
     @JsonFormat(pattern = "hh:mm")

@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TeamDTO {
-    private long teamId;
+    private Long teamId;
     private String teamName;
-    private long teamManagerId;
-    private int teamSize;
-    private boolean isFreeToJoin;
+    private Long teamManagerId;
+    private Integer teamSize;
+    private Boolean isFreeToJoin;
 }

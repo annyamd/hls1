@@ -11,9 +11,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlaygroundAvailabilityDTO {
-    private long id;
+    private Long id;
     private Boolean isAvailable;
     private LocalTime availableFrom;
     private LocalTime availableTo;
-    private int capacity;
+    private Integer capacity;
 }

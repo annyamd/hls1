@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SportDTO {
-    private long sportId;
+    private Long sportId;
     private String sportType;
 }

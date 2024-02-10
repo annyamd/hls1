@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlaygroundDTO {
-    private long  playgroundId;
+    private Long playgroundId;
     private String location;
     private String playgroundName;
     private Float latitude;
