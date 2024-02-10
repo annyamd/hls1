@@ -23,10 +23,10 @@ public class PlaygroundAvailability {
     @Column(name = "is_available", nullable = false)
     private boolean isAvailable;
 
-    @Column(name = "available_from", nullable = false)
+    @Column(name = "available_from")
     private LocalTime availableFrom;
 
-    @Column(name = "available_to", nullable = false)
+    @Column(name = "available_to")
     private LocalTime availableTo;
 
     @Column(name = "capacity", nullable = false)
