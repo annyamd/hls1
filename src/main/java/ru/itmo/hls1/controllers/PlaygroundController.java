@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.itmo.hls1.model.dto.PlaygroundDTO;
 import ru.itmo.hls1.sevice.PlaygroundService;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/playgrounds")
@@ -17,43 +19,33 @@ public class PlaygroundController {
     @GetMapping(value = "/")
     public ResponseEntity<?> getAllPlaygrounds(@RequestParam(value = "page", defaultValue = "0") int page,
                                                @RequestParam(value = "size", defaultValue = "10") int size) {
-//        List<PlaygroundDTO> dtos = new ArrayList<>();
-//        for (Playground p : playgroundService.findAllPlaygrounds()) {
-//            dtos.add(new PlaygroundDTO(p.getId(), p.getPlaygroundName(), p.getLocation()));
-//        }
-        return new ResponseEntity<>(HttpStatus.OK);
+        List<PlaygroundDTO> playgroundDTOs = playgroundService.findAllPlaygrounds(page, size);
+        return ResponseEntity.ok().body(playgroundDTOs);
     }
 
     @GetMapping(value = "/{playgroundId}")
     public ResponseEntity<?> getPlaygroundById(@PathVariable long playgroundId) {
-//        Playground pg = playgroundService.getPlayground(id);
-//        return new PlaygroundDTO(pg.getId(), pg.getLocation(), pg.getPlaygroundName());
-        return new ResponseEntity<>(HttpStatus.OK);
+        PlaygroundDTO pg = playgroundService.getPlayground(playgroundId);
+        return ResponseEntity.ok().body(pg);
     }
 
     @PostMapping(value = "/")
     public ResponseEntity<?> createPlayground(@RequestBody PlaygroundDTO playground) {
-        return new ResponseEntity<>(HttpStatus.OK);
+//        check if already exists (by validator)
+        PlaygroundDTO created = playgroundService.createPlayground(playground);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{playgroundId}")
     public ResponseEntity<?> updatePlayground(@PathVariable long playgroundId, @RequestBody PlaygroundDTO playground) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        PlaygroundDTO updated = playgroundService.updatePlayground(playgroundId, playground);
+        return ResponseEntity.ok().body(updated);
     }
 
     @DeleteMapping("/{playgroundId}")
     public ResponseEntity<?> deletePlayground(@PathVariable long playgroundId) {
+        playgroundService.deletePlayground(playgroundId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    @GetMapping(value = "/{id}/info")
-//    public PlaygroundAvailabilityDTO getPlaygroundInfo(@PathVariable Long id){
-//        PlaygroundAvailability pga = playgroundService.getPlaygroundDetails(id);
-//        Playground pg = pga.getPlayground();
-//        return new PlaygroundAvailabilityDTO(pga.getPlaygroundAvailability_id(), pga.getAvailability(),
-//                pga.getAvailable_from(), pga.getAvailable_to(),
-//                new PlaygroundDTO(pg.getId(), pg.getLocation(), pg.getPlaygroundName()));
-//    }
-
 
 }
