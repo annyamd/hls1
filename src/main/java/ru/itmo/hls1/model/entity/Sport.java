@@ -2,9 +2,6 @@ package ru.itmo.hls1.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.itmo.hls1.model.constant.SportType;
-
-import java.util.List;
 
 
 @Data

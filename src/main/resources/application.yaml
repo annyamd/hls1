@@ -4,11 +4,9 @@ spring:
         url: jdbc:postgresql://localhost:5432/mydb
         username: postgres
         password: 12345a
-#    liquibase:
-#      change-log: classpath:db/db.changelog-master.xml
     jpa:
         hibernate:
-            ddl-auto: create
+            ddl-auto: none
         show-sql: true
         properties:
             hibernate:

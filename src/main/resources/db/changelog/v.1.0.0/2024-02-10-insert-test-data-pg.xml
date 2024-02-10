@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2024-02-10-insert-test-data-pg" author="admin">
+
+        <!--availabilities for playgrounds-->
+
+        <insert tableName="playground_availability">
+            <column name="is_available" value="true"/>
+            <column name="available_from" value="09:00"/>
+            <column name="available_to" value="18:00"/>
+            <column name="capacity" value="100"/>
+        </insert>
+        <insert tableName="playground_availability">
+            <column name="is_available" value="true"/>
+            <column name="available_from" value="11:30"/>
+            <column name="available_to" value="23:00"/>
+            <column name="capacity" value="200"/>
+        </insert>
+        <insert tableName="playground_availability">
+            <column name="is_available" value="false"/>
+            <column name="available_from" value="07:00"/>
+            <column name="available_to" value="20:00"/>
+            <column name="capacity" value="30"/>
+        </insert>
+
+        <!--playgrounds-->
+
+        <insert tableName="playground">
+            <column name="location" value="Chkalovskoye, Petrogradsky district, St. Petersburg"/>
+            <column name="playground_name" value="Central Park of Culture and Leisure named after. CM. Kirov"/>
+            <column name="latitude" value="59.979392"/>
+            <column name="longitude" value="30.258523"/>
+            <column name="pg_availability_id"
+                    valueComputed="(SELECT id FROM playground_availability WHERE available_from='09:00')"/>
+        </insert>
+        <insert tableName="playground">
+            <column name="location" value="Commandant airfield, Primorsky district, St. Petersburg"/>
+            <column name="playground_name" value="Specific Park"/>
+            <column name="latitude" value="60.007948"/>
+            <column name="longitude" value="30.3111"/>
+            <column name="pg_availability_id"
+                    valueComputed="(SELECT id FROM playground_availability WHERE available_from='11:30')"/>
+        </insert>
+        <insert tableName="playground">
+            <column name="location" value="Chkalovskoye, Petrogradsky district, St. Petersburg"/>
+            <column name="playground_name" value="Seaside Park Victory"/>
+            <column name="latitude" value="59.971408"/>
+            <column name="longitude" value="30.238432"/>
+            <column name="pg_availability_id"
+                    valueComputed="(SELECT id FROM playground_availability WHERE available_from='07:00')"/>
+        </insert>
+
+        <!--sports-->
+
+        <insert tableName="playground_sports">
+            <column name="playground_id"
+                    valueComputed="(SELECT playground_id FROM playground WHERE playground_name='Central Park of Culture and Leisure named after. CM. Kirov')"/>
+            <column name="sport_id"
+                    valueComputed="(SELECT sport_id FROM sport WHERE sport_name='football')"/>
+        </insert>
+        <insert tableName="playground_sports">
+            <column name="playground_id"
+                    valueComputed="(SELECT playground_id FROM playground WHERE playground_name='Central Park of Culture and Leisure named after. CM. Kirov')"/>
+            <column name="sport_id"
+                    valueComputed="(SELECT sport_id FROM sport WHERE sport_name='badminton')"/>
+        </insert>
+        <insert tableName="playground_sports">
+            <column name="playground_id"
+                    valueComputed="(SELECT playground_id FROM playground WHERE playground_name='Specific Park')"/>
+            <column name="sport_id"
+                    valueComputed="(SELECT sport_id FROM sport WHERE sport_name='athletics')"/>
+        </insert>
+        <insert tableName="playground_sports">
+            <column name="playground_id"
+                    valueComputed="(SELECT playground_id FROM playground WHERE playground_name='Seaside Park Victory')"/>
+            <column name="sport_id"
+                    valueComputed="(SELECT sport_id FROM sport WHERE sport_name='athletics')"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

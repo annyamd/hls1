@@ -20,17 +20,23 @@ public class Playground {
     @Column(name = "location", nullable = false)
     private String location;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @Column(name = "latitude", nullable = false)
+    private Float latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private Float longitude;
+
+    @ManyToMany
     @JoinTable(name = "playground_sports",
             joinColumns = @JoinColumn(name = "playground_id", referencedColumnName = "playground_id"),
             inverseJoinColumns = @JoinColumn(name = "sport_id", referencedColumnName = "sport_id"))
     private List<Sport> sports;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pg_availability_id")
     private PlaygroundAvailability playgroundAvailability;
 
-    @OneToMany(mappedBy = "playground")
+    @OneToMany(mappedBy = "playground", cascade = CascadeType.ALL)
     private List<Booking> bookingList;
 
 }

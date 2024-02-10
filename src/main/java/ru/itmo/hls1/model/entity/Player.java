@@ -34,8 +34,9 @@ public class Player {
     @Column(name = "weight_kg", nullable = false)
     private Float weight;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false, length = 1)
-    private String gender;
+    private Gender gender;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -49,4 +50,9 @@ public class Player {
 
     @OneToMany(mappedBy = "player")
     private List<Booking> bookingList;
+
+    public enum Gender {
+        M,
+        F
+    }
 }
