@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,4 +14,11 @@ public class ErrorDTO {
     private final LocalDateTime timestamp;
     private final String message;
     private final String error;
+    private List<ViolationDTO> violations;
+
+    public ErrorDTO(LocalDateTime timestamp, String message, String error) {
+        this.timestamp = timestamp;
+        this.message = message;
+        this.error = error;
+    }
 }
