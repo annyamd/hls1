@@ -1,5 +1,6 @@
 package ru.itmo.hls1.model.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -43,5 +44,6 @@ public class PlaygroundDTO {
     private List<Long> sportsId;
 
     @NotNull(message = "playground_availability field can't be null")
+    @Valid
     private PlaygroundAvailabilityDTO playgroundAvailability;
 }

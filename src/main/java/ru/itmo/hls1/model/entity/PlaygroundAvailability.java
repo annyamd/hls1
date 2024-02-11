@@ -18,10 +18,10 @@ public class PlaygroundAvailability {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "is_available", nullable = false)
-    private boolean isAvailable;
+    private Boolean isAvailable;
 
     @Column(name = "available_from")
     private LocalTime availableFrom;
@@ -30,7 +30,7 @@ public class PlaygroundAvailability {
     private LocalTime availableTo;
 
     @Column(name = "capacity", nullable = false)
-    private int capacity;
+    private Integer capacity;
 
     @OneToOne(mappedBy = "playgroundAvailability")
     private Playground playground;

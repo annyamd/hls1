@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class PlaygroundService {
 
     private final PlaygroundRepository playgroundRepository;
-    private final PlaygroundAvailabilityRepository pgAvailabilityRepository;
     private final SportRepository sportRepository;
     private final PlaygroundMapper pgMapper = new PlaygroundMapper();
     private final AvailabilityMapper availabilityMapper = new AvailabilityMapper();
@@ -45,6 +44,7 @@ public class PlaygroundService {
 
     public PlaygroundDTO createPlayground(PlaygroundDTO playgroundDTO) {
         Playground playground = pgMapper.dtoToEntity(playgroundDTO);
+        playground.setId(null);
         playgroundRepository.save(playground);
         return pgMapper.entityToDto(playground);
     }
@@ -60,6 +60,8 @@ public class PlaygroundService {
     }
 
     public void deletePlayground(long id) {
+        playgroundRepository.findById(id)
+                .orElseThrow(() -> new PlaygroundNotFoundException("id = " + id));
         playgroundRepository.deleteById(id);
     }
 
@@ -69,7 +71,7 @@ public class PlaygroundService {
         public PlaygroundAvailabilityDTO entityToDto(PlaygroundAvailability entity) {
             return new PlaygroundAvailabilityDTO(
                     entity.getId(),
-                    entity.isAvailable(),
+                    entity.getIsAvailable(),
                     entity.getAvailableFrom(),
                     entity.getAvailableTo(),
                     entity.getCapacity()

@@ -12,7 +12,7 @@ public class Playground {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "playground_id")
-    private long id;
+    private Long id;
 
     @Column(name = "playground_name", nullable = false)
     private String playgroundName;

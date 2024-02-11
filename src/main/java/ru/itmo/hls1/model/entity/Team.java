@@ -13,16 +13,16 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_id")
-    private long teamId;
+    private Long teamId;
 
     @Column(name = "team_name", nullable = false)
     private String teamName;
 
     @Column(name = "team_size", nullable = false)
-    private long teamSize;
+    private Long teamSize;
 
     @Column(name = "is_free_to_join", nullable = false)
-    private boolean isFreeToJoin;
+    private Boolean isFreeToJoin;
 
     @ManyToMany(mappedBy = "teams")
     private List<Player> players;
