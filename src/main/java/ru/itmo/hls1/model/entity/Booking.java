@@ -3,6 +3,7 @@ package ru.itmo.hls1.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,9 +12,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="booking")
-@NoArgsConstructor
 public class Booking {
 
     @Id

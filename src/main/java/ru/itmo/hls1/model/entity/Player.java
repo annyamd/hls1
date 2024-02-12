@@ -1,7 +1,10 @@
 package ru.itmo.hls1.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 /**
@@ -10,6 +13,8 @@ import java.util.List;
 
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "player")
 public class Player {
@@ -17,7 +22,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "player_id")
-    private Long player_id;
+    private Long playerId;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
