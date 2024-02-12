@@ -1,4 +1,6 @@
-package ru.itmo.hls1.controllers.exceptions;
+package ru.itmo.hls1.controllers.exceptions.not_found;
+
+import ru.itmo.hls1.controllers.exceptions.ControllerException;
 
 import java.time.LocalDateTime;
 
