@@ -1,16 +1,15 @@
 package ru.itmo.hls1.controllers.exceptions.handlers;
 
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.itmo.hls1.controllers.exceptions.NotFoundException;
+import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
+import ru.itmo.hls1.controllers.exceptions.role.RoleNotGrantedException;
+import ru.itmo.hls1.controllers.exceptions.UserAlreadyExistsException;
 import ru.itmo.hls1.model.dto.ErrorDTO;
 import ru.itmo.hls1.model.dto.ViolationDTO;
 
@@ -22,8 +21,22 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorDTO handleNotFound(NotFoundException ex) {
+        return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
+    }
+
+    @ExceptionHandler(RoleNotGrantedException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorDTO handleNotGrantedRole(RoleNotGrantedException ex) {
+        return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorDTO handleAlreadyExists(UserAlreadyExistsException ex) {
         return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
     }
 

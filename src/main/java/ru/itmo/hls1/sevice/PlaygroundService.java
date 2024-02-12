@@ -5,12 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.itmo.hls1.controllers.exceptions.PlaygroundNotFoundException;
+import ru.itmo.hls1.controllers.exceptions.not_found.PlaygroundNotFoundException;
 import ru.itmo.hls1.model.dto.*;
 import ru.itmo.hls1.model.entity.Playground;
 import ru.itmo.hls1.model.entity.PlaygroundAvailability;
 import ru.itmo.hls1.model.entity.Sport;
-import ru.itmo.hls1.repository.PlaygroundAvailabilityRepository;
 import ru.itmo.hls1.repository.PlaygroundRepository;
 import ru.itmo.hls1.repository.SportRepository;
 import ru.itmo.hls1.sevice.util.Mapper;
@@ -54,7 +53,7 @@ public class PlaygroundService {
                 .orElseThrow(() -> new PlaygroundNotFoundException("id = " + id));
         Playground updated = pgMapper.dtoToEntity(dto);
         updated.setId(id);
-        updated.getPlaygroundAvailability().setId(found.getPlaygroundAvailability().getId());
+        updated.setPlaygroundAvailability(found.getPlaygroundAvailability());
         playgroundRepository.save(updated);
         return pgMapper.entityToDto(updated);
     }
