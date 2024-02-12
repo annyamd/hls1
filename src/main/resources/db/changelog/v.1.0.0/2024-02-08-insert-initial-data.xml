@@ -5,18 +5,6 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="2024-02-08-insert-data" author="admin">
-        <insert tableName="role">
-            <column name="name" value="SUPERVISOR" />
-        </insert>
-        <insert tableName="role">
-            <column name="name" value="EDITOR" />
-        </insert>
-        <insert tableName="role">
-            <column name="name" value="PLAYER" />
-        </insert>
-        <insert tableName="role">
-            <column name="name" value="TEAM_MANAGER" />
-        </insert>
 
         <insert tableName="sport">
             <column name="sport_name" value="football" />

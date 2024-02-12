@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2024-02-12-insert-player-tm" author="admin">
+
+        <!-- add player -->
+
+        <insert tableName="player">
+            <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='user1')"/>
+            <column name="age" value="21"/>
+            <column name="gender" value="F"/>
+            <column name="height_cm" value="165"/>
+            <column name="weight_kg" value="50"/>
+            <column name="first_name" value="Leslie"/>
+            <column name="last_name" value="Knope"/>
+        </insert>
+
+        <insert tableName="team_manager">
+            <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='user2')"/>
+            <column name="email" value="no@email.com"/>
+            <column name="phone" value="890000000"/>
+            <column name="first_name" value="Ron"/>
+            <column name="last_name" value="Swonson"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

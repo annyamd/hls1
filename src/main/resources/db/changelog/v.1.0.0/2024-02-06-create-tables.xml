@@ -4,35 +4,35 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet author="liquibase (generated)" id="1707415531271-1">
+    <changeSet author="liquibase (generated)" id="1707749612130-1">
         <createTable tableName="booking">
             <column name="date" type="date"/>
             <column name="end_time" type="time(6) WITHOUT TIME ZONE"/>
-            <column name="player_id" type="INTEGER"/>
             <column name="start_time" type="time(6) WITHOUT TIME ZONE"/>
             <column autoIncrement="true" name="booking_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="booking_pkey"/>
             </column>
+            <column name="player_id" type="BIGINT"/>
             <column name="playground_id" type="BIGINT"/>
             <column name="team_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-2">
+    <changeSet author="liquibase (generated)" id="1707749612130-2">
         <createTable tableName="player">
             <column name="age" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
-            <column name="gender" type="VARCHAR(1)">
+            <column name="gender" type="CHAR(1)">
                 <constraints nullable="false"/>
             </column>
             <column name="height_cm" type="FLOAT4">
                 <constraints nullable="false"/>
             </column>
-            <column autoIncrement="true" name="player_id" type="INTEGER">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="player_pkey"/>
-            </column>
             <column name="weight_kg" type="FLOAT4">
                 <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="player_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="player_pkey"/>
             </column>
             <column name="user_id" type="BIGINT"/>
             <column name="first_name" type="VARCHAR(255)">
@@ -43,8 +43,14 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-3">
+    <changeSet author="liquibase (generated)" id="1707749612130-3">
         <createTable tableName="playground">
+            <column name="latitude" type="FLOAT4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="FLOAT4">
+                <constraints nullable="false"/>
+            </column>
             <column name="pg_availability_id" type="BIGINT"/>
             <column autoIncrement="true" name="playground_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="playground_pkey"/>
@@ -57,11 +63,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-4">
+    <changeSet author="liquibase (generated)" id="1707749612130-4">
         <createTable tableName="playground_availability">
-            <column name="available_from" type="time(6) WITHOUT TIME ZONE">
-            </column>
-            <column name="available_to" type="time(6) WITHOUT TIME ZONE">
+            <column name="available_from" type="time(6) WITHOUT TIME ZONE"/>
+            <column name="available_to" type="time(6) WITHOUT TIME ZONE"/>
+            <column name="capacity" type="INTEGER">
+                <constraints nullable="false"/>
             </column>
             <column name="is_available" type="BOOLEAN">
                 <constraints nullable="false"/>
@@ -71,17 +78,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-5">
-        <createTable tableName="role">
-            <column autoIncrement="true" name="role_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="role_pkey"/>
-            </column>
-            <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-6">
+    <changeSet author="liquibase (generated)" id="1707749612130-5">
         <createTable tableName="sport">
             <column autoIncrement="true" name="sport_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="sport_pkey"/>
@@ -91,7 +88,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-7">
+    <changeSet author="liquibase (generated)" id="1707749612130-6">
         <createTable tableName="team">
             <column name="is_free_to_join" type="BOOLEAN">
                 <constraints nullable="false"/>
@@ -108,7 +105,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-8">
+    <changeSet author="liquibase (generated)" id="1707749612130-7">
         <createTable tableName="team_manager">
             <column autoIncrement="true" name="team_manager_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="team_manager_pkey"/>
@@ -128,7 +125,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-9">
+    <changeSet author="liquibase (generated)" id="1707749612130-8">
         <createTable tableName="users">
             <column autoIncrement="true" name="user_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
@@ -141,25 +138,30 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-10">
+    <changeSet author="liquibase (generated)" id="1707749612130-9">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1707749612130-10">
         <addUniqueConstraint columnNames="user_id" constraintName="player_user_id_key" tableName="player"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-11">
+    <changeSet author="liquibase (generated)" id="1707749612130-11">
         <addUniqueConstraint columnNames="pg_availability_id" constraintName="playground_pg_availability_id_key"
                              tableName="playground"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-12">
-        <addUniqueConstraint columnNames="name" constraintName="role_name_key" tableName="role"/>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-13">
+    <changeSet author="liquibase (generated)" id="1707749612130-12">
         <addUniqueConstraint columnNames="user_id" constraintName="team_manager_user_id_key" tableName="team_manager"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-14">
+    <changeSet author="liquibase (generated)" id="1707749612130-13">
         <addUniqueConstraint columnNames="username" constraintName="users_username_key" tableName="users"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-15">
+    <changeSet author="liquibase (generated)" id="1707749612130-14">
         <createTable tableName="players_teams">
-            <column name="player_id" type="INTEGER">
+            <column name="player_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="team_id" type="BIGINT">
@@ -167,7 +169,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-16">
+    <changeSet author="liquibase (generated)" id="1707749612130-15">
         <createTable tableName="playground_sports">
             <column name="playground_id" type="BIGINT">
                 <constraints nullable="false"/>
@@ -177,92 +179,76 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-17">
-        <createTable tableName="user_roles">
-            <column name="role_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="user_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-18">
+    <changeSet author="liquibase (generated)" id="1707749612130-16">
         <addForeignKeyConstraint baseColumnNames="manager_id" baseTableName="team"
                                  constraintName="fk34ryo1fstmy8lm7irv35pnuvo" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="team_manager_id" referencedTableName="team_manager"
                                  validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-19">
+    <changeSet author="liquibase (generated)" id="1707749612130-17">
         <addForeignKeyConstraint baseColumnNames="player_id" baseTableName="booking"
                                  constraintName="fk9ipxppfo1ovye3luie3h30ln5" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="player_id" referencedTableName="player" validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-20">
+    <changeSet author="liquibase (generated)" id="1707749612130-18">
         <addForeignKeyConstraint baseColumnNames="pg_availability_id" baseTableName="playground"
                                  constraintName="fkck9wef86irsad0kq7lv39h14x" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="playground_availability"
                                  validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-21">
+    <changeSet author="liquibase (generated)" id="1707749612130-19">
         <addForeignKeyConstraint baseColumnNames="team_id" baseTableName="booking"
                                  constraintName="fkdi1gvsswg4chc2q6yhydaj29s" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="team_id" referencedTableName="team" validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-22">
+    <changeSet author="liquibase (generated)" id="1707749612130-20">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="team_manager"
                                  constraintName="fkf1fm9vl3y8oqjhkpceg4iicta" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="user_id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-23">
+    <changeSet author="liquibase (generated)" id="1707749612130-21">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles"
                                  constraintName="fkhfh9dx7w3ubf1co1vdev94g3f" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="user_id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-24">
+    <changeSet author="liquibase (generated)" id="1707749612130-22">
         <addForeignKeyConstraint baseColumnNames="player_id" baseTableName="players_teams"
                                  constraintName="fkk4d7i4a174v2ciftt7rw68xje" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="player_id" referencedTableName="player" validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-25">
+    <changeSet author="liquibase (generated)" id="1707749612130-23">
         <addForeignKeyConstraint baseColumnNames="sport_id" baseTableName="playground_sports"
                                  constraintName="fkndlp7ilpulrisbcxur9lnerev" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="sport_id" referencedTableName="sport" validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-26">
+    <changeSet author="liquibase (generated)" id="1707749612130-24">
         <addForeignKeyConstraint baseColumnNames="playground_id" baseTableName="playground_sports"
                                  constraintName="fknm4w1adfxbi02t5j1a5vm59b0" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="playground_id" referencedTableName="playground"
                                  validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-27">
+    <changeSet author="liquibase (generated)" id="1707749612130-25">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="player"
                                  constraintName="fkoycxb69gpaapuv23fn52y0g50" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="user_id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-28">
+    <changeSet author="liquibase (generated)" id="1707749612130-26">
         <addForeignKeyConstraint baseColumnNames="team_id" baseTableName="players_teams"
                                  constraintName="fkp6kofd88c359uwkb3nta5svnv" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="team_id" referencedTableName="team" validate="true"/>
     </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-29">
-        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles"
-                                 constraintName="fkrhfovtciq1l558cw6udg0h0d3" deferrable="false"
-                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
-                                 referencedColumnNames="role_id" referencedTableName="role" validate="true"/>
-    </changeSet>
-    <changeSet author="liquibase (generated)" id="1707415531271-30">
+    <changeSet author="liquibase (generated)" id="1707749612130-27">
         <addForeignKeyConstraint baseColumnNames="playground_id" baseTableName="booking"
                                  constraintName="fkt3ikr4ho24l38x7ydql20d7og" deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"

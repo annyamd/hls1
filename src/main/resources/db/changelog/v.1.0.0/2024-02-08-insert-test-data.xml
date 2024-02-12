@@ -26,20 +26,21 @@
         <!--user roles-->
 
         <insert tableName="user_roles">
-            <column name="role_id" valueComputed="(SELECT role_id FROM role WHERE name='PLAYER')"/>
+            <column name="role" value="PLAYER"/>
             <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='user1')"/>
         </insert>
         <insert tableName="user_roles">
-            <column name="role_id" valueComputed="(SELECT role_id FROM role WHERE name='TEAM_MANAGER')"/>
+            <column name="role" value="TEAM_MANAGER"/>
             <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='user2')"/>
         </insert>
         <insert tableName="user_roles">
-            <column name="role_id" valueComputed="(SELECT role_id FROM role WHERE name='SUPERVISOR')"/>
+            <column name="role" value="SUPERVISOR"/>
             <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='supervisor1')"/>
         </insert>
         <insert tableName="user_roles">
-            <column name="role_id" valueComputed="(SELECT role_id FROM role WHERE name='EDITOR')"/>
+            <column name="role" value="EDITOR"/>
             <column name="user_id" valueComputed="(SELECT user_id FROM users WHERE username='editor1')"/>
         </insert>
+
     </changeSet>
 </databaseChangeLog>
