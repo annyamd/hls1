@@ -42,7 +42,6 @@ public class PlaygroundController {
 
     @PostMapping(value = "/")
     public ResponseEntity<?> createPlayground(@Valid @RequestBody PlaygroundDTO playground) {
-//        check if already exists (by validator)
         PlaygroundDTO created = playgroundService.createPlayground(playground);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
