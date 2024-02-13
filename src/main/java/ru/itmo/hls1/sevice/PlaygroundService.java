@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.itmo.hls1.controllers.exceptions.AvailabilityNotAssignedException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlaygroundNotFoundException;
 import ru.itmo.hls1.model.dto.*;
 import ru.itmo.hls1.model.entity.Playground;
@@ -14,6 +15,7 @@ import ru.itmo.hls1.repository.PlaygroundRepository;
 import ru.itmo.hls1.repository.SportRepository;
 import ru.itmo.hls1.sevice.util.Mapper;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,9 +56,32 @@ public class PlaygroundService {
         Playground updated = pgMapper.dtoToEntity(dto);
         updated.setId(id);
         updated.setPlaygroundAvailability(found.getPlaygroundAvailability());
+        updated.setBookingList(found.getBookingList());
+
+        if (!updated.getPlaygroundAvailability().getIsAvailable()) {
+            updated.setBookingList(null);
+        }
+
+        checkTime(found, updated);
+
         playgroundRepository.save(updated);
         return pgMapper.entityToDto(updated);
     }
+
+    private void checkTime(Playground old, Playground updated) {
+        LocalTime oldStart = old.getPlaygroundAvailability().getAvailableFrom();
+        LocalTime oldEnd = old.getPlaygroundAvailability().getAvailableTo();
+        LocalTime newStart = updated.getPlaygroundAvailability().getAvailableFrom();
+        LocalTime newEnd = updated.getPlaygroundAvailability().getAvailableTo();
+
+        if (oldStart != newStart || oldEnd != newEnd) {
+            if (updated.getBookingList() != null && !updated.getBookingList().isEmpty()) {
+                throw new AvailabilityNotAssignedException(
+                        "Booking records exists for this playground. Switch isAvailable to false to remove all records.");
+            }
+        }
+    }
+
 
     public void deletePlayground(long id) {
         playgroundRepository.findById(id)
@@ -79,8 +104,11 @@ public class PlaygroundService {
 
         @Override
         public PlaygroundAvailability dtoToEntity(PlaygroundAvailabilityDTO dto) {
+            if (dto.getIsAvailable() && (dto.getAvailableFrom() == null || dto.getAvailableTo() == null)) {
+                throw new AvailabilityNotAssignedException("time not chosen");
+            }
             return new PlaygroundAvailability(
-                    dto.getId(),
+                    null,
                     dto.getIsAvailable(),
                     dto.getAvailableFrom(),
                     dto.getAvailableTo(),

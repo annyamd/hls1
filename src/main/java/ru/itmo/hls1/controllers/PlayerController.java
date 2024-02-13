@@ -9,8 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.hls1.model.dto.PlayerDTO;
+import ru.itmo.hls1.model.dto.TeamDTO;
 import ru.itmo.hls1.sevice.PlayerService;
-import ru.itmo.hls1.sevice.PlaygroundService;
+import ru.itmo.hls1.sevice.TeamService;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import static ru.itmo.hls1.controllers.util.ValidationMessages.*;
 public class PlayerController {
 
     private final PlayerService playerService;
+    private final TeamService teamService;
 
     @GetMapping(value = "/")
     public ResponseEntity<?> getAllPlayers(
@@ -62,6 +64,32 @@ public class PlayerController {
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playerId
     ) {
         playerService.delete(playerId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{playerId}/teams")
+    public ResponseEntity<?> getTeamsOfPlayer(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playerId
+    ) {
+        List<TeamDTO> teams = teamService.getTeamsByPlayer(playerId);
+        return ResponseEntity.ok(teams);
+    }
+
+    @PostMapping("/{playerId}/teams/{teamId}")
+    public ResponseEntity<?> joinTeam(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playerId,
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId
+    ) {
+        playerService.joinTeam(playerId, teamId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{playerId}/teams/{teamId}")
+    public ResponseEntity<?> leaveTeam(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playerId,
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId
+    ) {
+        playerService.leaveTeam(playerId, teamId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

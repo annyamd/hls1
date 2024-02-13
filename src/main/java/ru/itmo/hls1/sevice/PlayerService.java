@@ -3,18 +3,25 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import ru.itmo.hls1.controllers.exceptions.TeamClosedException;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlaygroundNotFoundException;
+import ru.itmo.hls1.controllers.exceptions.not_found.TeamNotFoundException;
 import ru.itmo.hls1.controllers.exceptions.role.RoleAlreadyGrantedException;
 import ru.itmo.hls1.controllers.exceptions.not_found.UserNotFoundException;
 import ru.itmo.hls1.model.dto.PlayerDTO;
+import ru.itmo.hls1.model.dto.TeamDTO;
 import ru.itmo.hls1.model.entity.Player;
 import ru.itmo.hls1.model.entity.Role;
+import ru.itmo.hls1.model.entity.Team;
 import ru.itmo.hls1.model.entity.User;
 import ru.itmo.hls1.repository.PlayerRepository;
+import ru.itmo.hls1.repository.TeamRepository;
 import ru.itmo.hls1.repository.UserRepository;
 import ru.itmo.hls1.sevice.util.GeneralService;
 import ru.itmo.hls1.sevice.util.Mapper;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +30,8 @@ public class PlayerService extends GeneralService<Player, PlayerDTO> {
     private final Mapper<Player, PlayerDTO> mapper = new PlayerMapper();
     private final PlayerRepository playerRepository;
     private final UserRepository userRepository;
+    private final TeamRepository teamRepository;
+    private final TeamService teamService;
 
     @Override
     public PlayerDTO create(PlayerDTO dto) {
@@ -55,6 +64,19 @@ public class PlayerService extends GeneralService<Player, PlayerDTO> {
         updated.setBookingList(updated.getBookingList());
         playerRepository.save(updated);
         return mapper.entityToDto(updated);
+    }
+
+    public void joinTeam(long playerId, long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("id = " + teamId));
+        if (!team.getIsFreeToJoin()) {
+            throw new TeamClosedException("", "");
+        }
+        teamService.addMember(teamId, playerId, team.getManager().getTeamManagerId());
+    }
+
+    public void leaveTeam(long playerId, long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("id = " + teamId));
+        teamService.removeMember(teamId, playerId, team.getManager().getTeamManagerId());
     }
 
     @Override

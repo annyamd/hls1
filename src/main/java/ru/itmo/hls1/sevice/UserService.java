@@ -7,6 +7,7 @@ import ru.itmo.hls1.controllers.exceptions.*;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlayerNotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.UserNotFoundException;
+import ru.itmo.hls1.controllers.exceptions.role.RoleAlreadyGrantedException;
 import ru.itmo.hls1.controllers.exceptions.role.RoleRestrictedToGrantManuallyException;
 import ru.itmo.hls1.model.dto.RoleDTO;
 import ru.itmo.hls1.model.dto.UserDTO;
@@ -43,6 +44,9 @@ public class UserService extends GeneralService<User, UserDTO> {
             throw new RoleRestrictedToGrantManuallyException(role);
         }
         User user = getEntityById(id);
+        if (user.getRoles().contains(role)) {
+            throw new RoleAlreadyGrantedException(id, role);
+        }
         user.getRoles().add(role);
         userRepository.save(user);
     }
