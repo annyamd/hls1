@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Set;
+
 import static ru.itmo.hls1.controllers.util.ValidationMessages.MSG_ID_NEGATIVE;
 import static ru.itmo.hls1.controllers.util.ValidationMessages.MSG_SIZE_NEGATIVE;
 
@@ -16,16 +18,18 @@ public class TeamDTO {
     @Min(value = 0, message = MSG_ID_NEGATIVE)
     private Long teamId;
 
-    @NotNull(message = "firstName field can't be null")
+    @NotBlank(message = "firstName field can't be blank")
     private String teamName;
 
     @Min(value = 0, message = MSG_ID_NEGATIVE)
-    @NotBlank(message = "teamManagerId field can't be blank")
+    @NotNull(message = "teamManagerId field can't be null")
     private Long teamManagerId;
 
     @Min(value = 0, message = MSG_SIZE_NEGATIVE)
-    private Integer teamSize;
+    private Long teamSize;
 
-    @NotBlank(message = "isFreeToJoin field can't be blank")
+    @NotNull(message = "isFreeToJoin field can't be null")
     private Boolean isFreeToJoin;
+
+    private Set<Long> playersId;
 }
