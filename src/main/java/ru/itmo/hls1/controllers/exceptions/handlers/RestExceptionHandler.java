@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import ru.itmo.hls1.controllers.exceptions.ControllerException;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.role.RoleNotGrantedException;
 import ru.itmo.hls1.controllers.exceptions.UserAlreadyExistsException;
@@ -39,6 +40,14 @@ public class RestExceptionHandler {
     protected ErrorDTO handleAlreadyExists(UserAlreadyExistsException ex) {
         return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
     }
+
+    @ExceptionHandler(ControllerException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorDTO handleNotImpl(ControllerException ex) {
+        return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
+    }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
