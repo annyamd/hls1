@@ -47,10 +47,7 @@ public class Player {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "players_teams",
-            joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "player_id"),
-            inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "team_id"))
+    @ManyToMany(mappedBy = "players")
     private List<Team> teams;
 
     @OneToMany(mappedBy = "player")

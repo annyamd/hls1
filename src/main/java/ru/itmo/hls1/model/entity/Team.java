@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -28,8 +29,11 @@ public class Team {
     @Column(name = "is_free_to_join", nullable = false)
     private Boolean isFreeToJoin;
 
-    @ManyToMany(mappedBy = "teams")
-    private List<Player> players;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "players_teams",
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "player_id", referencedColumnName = "player_id"))
+    private Set<Player> players;
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
