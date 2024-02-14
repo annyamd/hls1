@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.itmo.hls1.config.security.utils.JwtUtils;
+import ru.itmo.hls1.model.dto.JwtTokenDTO;
 import ru.itmo.hls1.model.dto.UserDTO;
 
 @Service
@@ -29,7 +30,7 @@ public class AuthService {
 
         var jwt = jwtUtils.generateToken(userDetails);
 
-        return ResponseEntity.ok().body(jwt);
+        return ResponseEntity.ok().body(new JwtTokenDTO(jwt));
     }
 
     public ResponseEntity<?> signIn(UserDTO userDTO) {
@@ -44,6 +45,6 @@ public class AuthService {
 
         var jwt = jwtUtils.generateToken(userDetails);
 
-        return ResponseEntity.ok().body(jwt);
+        return ResponseEntity.ok().body(new JwtTokenDTO(jwt));
     }
 }
