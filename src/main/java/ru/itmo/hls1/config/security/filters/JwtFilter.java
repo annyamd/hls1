@@ -36,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Получаем заголовок
         var authHeader = request.getHeader(HEADER_NAME);
-        if (null == authHeader || "null".equals(authHeader)|| !authHeader.startsWith(BEARER_PREFIX) ) {
+        if (null == authHeader || "null".equals(authHeader) || !authHeader.startsWith(BEARER_PREFIX)) {
             // Если запрос не содержит необходимый заголовок для аутентификации по JWT, то пускаем дальше по фильтрам
             filterChain.doFilter(request, response);
             return;

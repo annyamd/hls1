@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class SecurityUser  implements UserDetails {
+public class SecurityUser implements UserDetails {
 
     private final User user;
 
