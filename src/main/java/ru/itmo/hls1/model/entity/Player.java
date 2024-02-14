@@ -40,7 +40,7 @@ public class Player {
     private Float weight;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender", nullable = false, length = 1)
     private Gender gender;
 
     @OneToOne
