@@ -1,6 +1,7 @@
 package ru.itmo.hls1.config.security.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -35,28 +36,32 @@ public class JwtUtils {
         return generateToken(userDetails, claims);
     }
 
-    public boolean isValid(String token, UserDetails userDetails) {
+    @Deprecated
+    public boolean isValid(String token, UserDetails userDetails) { // Optional
         String userName = extractUserName(token);
         List<String> roles = extractUserRoles(token);
 
-        if (!userName.equals(userDetails.getUsername()))
+        if (!userName.equals(userDetails.getUsername()))    // Optional
             return false;
 
-        if (isTokenExpired(token))
+        if (isTokenExpired(token))      // Optional
             return false;
 
         // TODO implement roles validation
 
         return true;
     }
+
     public String extractUserName(String token) {
         return extractAllClaims(token).getSubject();
     }
 
+    @Deprecated
     public List<String> extractUserRoles(String token) {
         return extractAllClaims(token).get("roles", List.class);
     }
 
+    @Deprecated(forRemoval = true)
     public Date extractExpirationDate(String token) {
         return extractAllClaims(token).getExpiration();
     }
@@ -75,15 +80,16 @@ public class JwtUtils {
                 .compact();
     }
 
+    @Deprecated(forRemoval = true)
     private boolean isTokenExpired(String token) {
         return extractExpirationDate(token).before(new Date());
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) throws JwtException {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
-                .parseSignedClaims(token)
+                .parseSignedClaims(token)     // ExpiredJwtException, SignatureException, JwtException
                 .getPayload();
     }
 
