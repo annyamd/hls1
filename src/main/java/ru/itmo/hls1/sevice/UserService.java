@@ -2,7 +2,11 @@ package ru.itmo.hls1.sevice;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.itmo.hls1.config.security.wrappers.SecurityUser;
 import ru.itmo.hls1.controllers.exceptions.*;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlayerNotFoundException;
@@ -24,7 +28,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService extends GeneralService<User, UserDTO> {
+public class UserService extends GeneralService<User, UserDTO> implements UserDetailsService {
 
     private final Mapper<User, UserDTO> mapper = new UserMapper();
     private final UserRepository userRepository;
@@ -98,6 +102,14 @@ public class UserService extends GeneralService<User, UserDTO> {
     @Override
     protected JpaRepository<User, Long> getRepository() {
         return userRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var user =  userRepository.findByUsername(username);
+
+        return user.map(SecurityUser::new)
+                .orElseThrow(() -> new UserNotFoundException("username = " + username));
     }
 
     static class UserMapper implements Mapper<User, UserDTO> {
