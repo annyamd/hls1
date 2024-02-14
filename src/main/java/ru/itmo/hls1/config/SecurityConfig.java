@@ -1,8 +1,11 @@
 package ru.itmo.hls1.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,10 +19,14 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.itmo.hls1.config.security.filters.JwtFilter;
 
 @Configuration
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,7 +34,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 // Настройка доступа к конечным точкам
-                .httpBasic().and()
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/plain_hello", "/admin_hello").authenticated()
@@ -40,32 +46,21 @@ public class SecurityConfig {
                         exceptionHandling -> exceptionHandling.authenticationEntryPoint(
                                 new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
                         )
-                );
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        ;
 
         return http.build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        var uds = new InMemoryUserDetailsManager();
-
-        var u1 = User.withUsername("user")
-                .password(passwordEncoder().encode("12345"))
-                .roles("USER")
-                .build();
-        var u2 = User.withUsername("admin")
-                .password(passwordEncoder().encode("12345"))
-                .roles("USER", "ADMIN")
-                .build();
-
-        uds.createUser(u1);
-        uds.createUser(u2);
-
-        return uds;
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+            throws Exception {
+        return config.getAuthenticationManager();
     }
 }
