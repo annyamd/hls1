@@ -66,8 +66,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 // TODO The token lifetime has expired
             } catch (SignatureException e) {
                 // TODO The signature is incorrect
-            } catch (JwtException e) {
-                // TODO JWT validation failed! Can't trust JWT!
             }
         }
 

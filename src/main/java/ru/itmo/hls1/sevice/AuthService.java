@@ -34,8 +34,6 @@ public class AuthService {
     }
 
     public ResponseEntity<?> signIn(UserDTO userDTO) {
-        //userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userDTO.getLogin(),
                 userDTO.getPassword()
