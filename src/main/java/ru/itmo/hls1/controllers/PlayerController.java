@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.itmo.hls1.model.dto.BookingDTO;
 import ru.itmo.hls1.model.dto.PlayerDTO;
 import ru.itmo.hls1.model.dto.TeamDTO;
+import ru.itmo.hls1.sevice.BookingService;
 import ru.itmo.hls1.sevice.PlayerService;
 import ru.itmo.hls1.sevice.TeamService;
 
@@ -25,6 +27,7 @@ public class PlayerController {
 
     private final PlayerService playerService;
     private final TeamService teamService;
+    private final BookingService bookingService;
 
     @GetMapping(value = "/")
     public ResponseEntity<?> getAllPlayers(
@@ -84,7 +87,7 @@ public class PlayerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/{playerId}/teams/{teamId}")
+    @DeleteMapping("/{playerId}/teams/{teamId}")
     public ResponseEntity<?> leaveTeam(
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playerId,
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId
@@ -92,5 +95,15 @@ public class PlayerController {
         playerService.leaveTeam(playerId, teamId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/{playerId}/bookings")
+    public ResponseEntity<?> getBookings(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playerId
+    ) {
+        List<BookingDTO> bookingDTOS = bookingService.getBookingsByPlayer(playerId);
+        return ResponseEntity.ok(bookingDTOS);
+    }
+
+    //  /{playerId}/bookings/
 
 }

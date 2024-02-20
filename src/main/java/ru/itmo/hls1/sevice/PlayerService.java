@@ -10,7 +10,6 @@ import ru.itmo.hls1.controllers.exceptions.not_found.TeamNotFoundException;
 import ru.itmo.hls1.controllers.exceptions.already_applied.RoleAlreadyGrantedException;
 import ru.itmo.hls1.controllers.exceptions.not_found.UserNotFoundException;
 import ru.itmo.hls1.model.dto.PlayerDTO;
-import ru.itmo.hls1.model.dto.TeamDTO;
 import ru.itmo.hls1.model.entity.Player;
 import ru.itmo.hls1.model.entity.Role;
 import ru.itmo.hls1.model.entity.Team;
@@ -20,8 +19,6 @@ import ru.itmo.hls1.repository.TeamRepository;
 import ru.itmo.hls1.repository.UserRepository;
 import ru.itmo.hls1.sevice.util.GeneralService;
 import ru.itmo.hls1.sevice.util.Mapper;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +58,7 @@ public class PlayerService extends GeneralService<Player, PlayerDTO> {
         updated.setPlayerId(found.getPlayerId());
         updated.setUser(found.getUser());
         updated.setTeams(found.getTeams());
-        updated.setBookingList(updated.getBookingList());
+        updated.setBookingList(found.getBookingList());
         playerRepository.save(updated);
         return mapper.entityToDto(updated);
     }

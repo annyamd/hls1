@@ -53,6 +53,26 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
         return super.create(dto);
     }
 
+    public List<BookingDTO> getBookingsByPlayer(long playerId) {
+        Player player = playerRepository.findById(playerId)
+                .orElseThrow(() -> new PlayerNotFoundException("id = " + playerId));
+        return player.getBookingList()
+                .stream()
+                .map(mapper::entityToDto)
+                .toList();
+    }
+
+    public List<BookingDTO> getBookingsByTeam(long teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamNotFoundException("id = " + teamId));
+        return team.getBookingList()
+                .stream()
+                .map(mapper::entityToDto)
+                .toList();
+    }
+
+//    private void checkSpace
+
     private void checkTimeForBooking(long pgId, LocalTime pgStartTime, LocalTime pgEndTime,
                                      LocalTime bookStartTime, LocalTime bookEndTime) {
         if (bookStartTime.isAfter(bookEndTime)) {

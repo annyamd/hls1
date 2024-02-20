@@ -65,25 +65,51 @@ public class TeamManagerController {
         return ResponseEntity.ok(teamManagerDTO);
     }
 
-    //    only by its team manager
-//    @PostMapping(value = "/{managerId}/teams/{playerId}")
-//    public ResponseEntity<?> addMemberToTeam(
-//            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId,
-//            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playerId,
-//            @RequestParam @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId
-//    ) {
-//        TeamDTO updated = teamService.addMember(teamId, playerId, managerId);
-//        return ResponseEntity.ok(updated);
-//    }
-//
-//    @DeleteMapping(value = "/{managerId}/players/{playerId}")
-//    public ResponseEntity<?> removeMemberFromTeam(
-//            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId,
-//            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playerId,
-//            @RequestParam @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId
-//    ) {
-//        TeamDTO updated = teamService.removeMember(teamId, playerId, managerId);
-//        return ResponseEntity.ok(updated);
-//    }
+    @PostMapping(value = "/{managerId}/teams")
+    public ResponseEntity<?> createTeam(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId,
+            @Valid @RequestBody TeamDTO teamDTO
+    ) {
+        teamDTO.setTeamManagerId(managerId);
+        TeamDTO created = teamService.create(teamDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @DeleteMapping(value = "/{managerId}/teams/{teamId}")
+    public ResponseEntity<?> deleteTeam(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId,
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId
+    ) {
+        teamService.delete(managerId, teamId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{managerId}/teams/{teamId}")
+    public ResponseEntity<?> updateTeam(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId,
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId,
+            @Valid @RequestBody TeamDTO teamDTO
+    ) {
+        teamDTO.setTeamManagerId(managerId);
+        TeamDTO updated = teamService.update(teamId, teamDTO);
+        return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping(value = "/{managerId}/teams")
+    public ResponseEntity<?> getAllTeams(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId
+    ) {
+        List<TeamDTO> teamDTOs = teamService.getAllTeamsByManager(managerId);
+        return ResponseEntity.ok(teamDTOs);
+    }
+
+    @GetMapping(value = "/{managerId}/teams/{teamId}")
+    public ResponseEntity<?> getTeamById(
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId,
+            @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId
+    ) {
+        TeamDTO teamDTO = teamService.getTeamByManager(managerId, teamId);
+        return ResponseEntity.ok(teamDTO);
+    }
 
 }
