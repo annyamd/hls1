@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.TeamManagerNotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.UserNotFoundException;
-import ru.itmo.hls1.controllers.exceptions.role.RoleAlreadyGrantedException;
+import ru.itmo.hls1.controllers.exceptions.already_applied.RoleAlreadyGrantedException;
 import ru.itmo.hls1.model.dto.TeamManagerDTO;
 import ru.itmo.hls1.model.entity.Role;
 import ru.itmo.hls1.model.entity.TeamManager;

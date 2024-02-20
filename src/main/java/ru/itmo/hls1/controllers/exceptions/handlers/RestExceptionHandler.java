@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.itmo.hls1.controllers.exceptions.ControllerException;
+import ru.itmo.hls1.controllers.exceptions.already_applied.AlreadyAppliedException;
+import ru.itmo.hls1.controllers.exceptions.invalid.InvalidRequestDataException;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
-import ru.itmo.hls1.controllers.exceptions.role.RoleNotGrantedException;
-import ru.itmo.hls1.controllers.exceptions.UserAlreadyExistsException;
+import ru.itmo.hls1.controllers.exceptions.unavailable_action.UnavailableActionException;
 import ru.itmo.hls1.model.dto.ErrorDTO;
 import ru.itmo.hls1.model.dto.ViolationDTO;
 
@@ -27,24 +28,17 @@ public class RestExceptionHandler {
         return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
     }
 
-    @ExceptionHandler(RoleNotGrantedException.class)
+    @ExceptionHandler({UnavailableActionException.class, InvalidRequestDataException.class})
     @ResponseBody
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    protected ErrorDTO handleNotGrantedRole(RoleNotGrantedException ex) {
+    protected ErrorDTO handleUnavailableAction(ControllerException ex) {
         return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ExceptionHandler(AlreadyAppliedException.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    protected ErrorDTO handleAlreadyExists(UserAlreadyExistsException ex) {
-        return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
-    }
-
-    @ExceptionHandler(ControllerException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    protected ErrorDTO handleNotImpl(ControllerException ex) {
+    @ResponseStatus(HttpStatus.CONFLICT)
+    protected ErrorDTO handleAlreadyApplied(AlreadyAppliedException ex) {
         return new ErrorDTO(ex.getTimestamp(), ex.getMessage(), ex.getError());
     }
 

@@ -3,11 +3,11 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import ru.itmo.hls1.controllers.exceptions.TeamClosedException;
+import ru.itmo.hls1.controllers.exceptions.unavailable_action.TeamClosedException;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlaygroundNotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.TeamNotFoundException;
-import ru.itmo.hls1.controllers.exceptions.role.RoleAlreadyGrantedException;
+import ru.itmo.hls1.controllers.exceptions.already_applied.RoleAlreadyGrantedException;
 import ru.itmo.hls1.controllers.exceptions.not_found.UserNotFoundException;
 import ru.itmo.hls1.model.dto.PlayerDTO;
 import ru.itmo.hls1.model.dto.TeamDTO;
@@ -69,7 +69,7 @@ public class PlayerService extends GeneralService<Player, PlayerDTO> {
     public void joinTeam(long playerId, long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("id = " + teamId));
         if (!team.getIsFreeToJoin()) {
-            throw new TeamClosedException("", "");
+            throw new TeamClosedException(teamId);
         }
         teamService.addMember(teamId, playerId, team.getManager().getTeamManagerId());
     }

@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.itmo.hls1.controllers.exceptions.AvailabilityNotAssignedException;
+import ru.itmo.hls1.controllers.exceptions.invalid.InvalidAvailabilityException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlaygroundNotFoundException;
 import ru.itmo.hls1.model.dto.*;
 import ru.itmo.hls1.model.entity.Playground;
@@ -76,7 +76,7 @@ public class PlaygroundService {
 
         if (oldStart != newStart || oldEnd != newEnd) {
             if (updated.getBookingList() != null && !updated.getBookingList().isEmpty()) {
-                throw new AvailabilityNotAssignedException(
+                throw new InvalidAvailabilityException(
                         "Booking records exists for this playground. Switch isAvailable to false to remove all records.");
             }
         }
@@ -105,7 +105,7 @@ public class PlaygroundService {
         @Override
         public PlaygroundAvailability dtoToEntity(PlaygroundAvailabilityDTO dto) {
             if (dto.getIsAvailable() && (dto.getAvailableFrom() == null || dto.getAvailableTo() == null)) {
-                throw new AvailabilityNotAssignedException("time not chosen");
+                throw new InvalidAvailabilityException("time not chosen");
             }
             return new PlaygroundAvailability(
                     null,

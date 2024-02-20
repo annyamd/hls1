@@ -3,9 +3,9 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import ru.itmo.hls1.controllers.exceptions.BookingTimeIncorrectException;
-import ru.itmo.hls1.controllers.exceptions.PlaygroundNotAvailableException;
-import ru.itmo.hls1.controllers.exceptions.NoBookingTargetException;
+import ru.itmo.hls1.controllers.exceptions.invalid.InvalidBookingTimeException;
+import ru.itmo.hls1.controllers.exceptions.unavailable_action.PlaygroundNotAvailableException;
+import ru.itmo.hls1.controllers.exceptions.invalid.NoBookingTargetException;
 import ru.itmo.hls1.controllers.exceptions.not_found.*;
 import ru.itmo.hls1.model.dto.BookingDTO;
 import ru.itmo.hls1.model.entity.Booking;
@@ -39,7 +39,7 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
         Playground playground = playgroundRepository.findById(dto.getPlaygroundId())
                 .orElseThrow(() -> new PlayerNotFoundException("id = " + dto.getPlaygroundId()));
         if (!playground.getPlaygroundAvailability().getIsAvailable()) {
-            throw new PlaygroundNotAvailableException("", "");
+            throw new PlaygroundNotAvailableException(playground.getId());
         }
 
         checkTimeForBooking(
@@ -56,22 +56,22 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
     private void checkTimeForBooking(long pgId, LocalTime pgStartTime, LocalTime pgEndTime,
                                      LocalTime bookStartTime, LocalTime bookEndTime) {
         if (bookStartTime.isAfter(bookEndTime)) {
-            throw new BookingTimeIncorrectException("start time must be earlier than end time");
+            throw new InvalidBookingTimeException("start time must be earlier than end time");
         }
         if (bookStartTime.isBefore(pgStartTime)) {
-            throw new BookingTimeIncorrectException("pg closed at this time");
+            throw new InvalidBookingTimeException("pg closed at this time");
         }
         if (bookEndTime.isAfter(pgEndTime)) {
-            throw new BookingTimeIncorrectException("pg closed at this time");
+            throw new InvalidBookingTimeException("pg closed at this time");
         }
 
         int duration = getDurationMinutes(bookStartTime, bookEndTime);
 
         if (duration < BK_DURATION_MIN) {
-            throw new BookingTimeIncorrectException("too small period of time");
+            throw new InvalidBookingTimeException("too small period of time");
         }
         if (duration > BK_DURATION_MAX) {
-            throw new BookingTimeIncorrectException("too big period of time");
+            throw new InvalidBookingTimeException("too big period of time");
         }
 
         List<Booking> bookings = bookingRepository.findByPlayground_Id(pgId);
@@ -81,7 +81,7 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
                     LocalTime end = it.getEndTime();
                     if (start.isAfter(bookStartTime) && start.isBefore(bookEndTime)
                             || end.isBefore(bookEndTime) && end.isAfter(start)) {
-                        throw new BookingTimeIncorrectException("intersection with existing booking (" + start + "-" + end + ")");
+                        throw new InvalidBookingTimeException("intersection with existing booking (" + start + "-" + end + ")");
                     }
                 });
     }
@@ -141,7 +141,7 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
                 team = teamRepository.findById(dto.getTeamId())
                         .orElseThrow(() -> new TeamNotFoundException("id = " + dto.getTeamId()));
             } else {
-                throw new NoBookingTargetException("", "");
+                throw new NoBookingTargetException();
             }
             return new Booking(
                     null,

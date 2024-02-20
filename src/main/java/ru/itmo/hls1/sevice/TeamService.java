@@ -3,10 +3,9 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import ru.itmo.hls1.controllers.exceptions.PlayerAlreadyInTeamException;
-import ru.itmo.hls1.controllers.exceptions.PlayerNotInTeamException;
-import ru.itmo.hls1.controllers.exceptions.TeamManagerNotHisTeamException;
-import ru.itmo.hls1.controllers.exceptions.TeamNoSpaceException;
+import ru.itmo.hls1.controllers.exceptions.already_applied.PlayerAlreadyInTeamException;
+import ru.itmo.hls1.controllers.exceptions.unavailable_action.TeamManagerNotHisTeamException;
+import ru.itmo.hls1.controllers.exceptions.unavailable_action.TeamNoSpaceException;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlayerNotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.TeamManagerNotFoundException;
@@ -47,10 +46,10 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
             throw new TeamManagerNotHisTeamException(teamId, teamManagerId);
         }
         if (team.getTeamSize() == team.getPlayers().size()) {
-            throw new TeamNoSpaceException();
+            throw new TeamNoSpaceException(teamId);
         }
         if (team.getPlayers().contains(player)) {
-            throw new PlayerAlreadyInTeamException();
+            throw new PlayerAlreadyInTeamException(playerId, teamId);
         }
         team.getPlayers().add(player);
         teamRepository.save(team);
@@ -65,7 +64,7 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
             throw new TeamManagerNotHisTeamException(teamId, teamManager);
         }
         if (!team.getPlayers().contains(player)) {
-            throw new PlayerNotInTeamException("", "");
+            throw new PlayerNotFoundException("id = " + playerId + ", teamId = " + teamId);
         }
         team.getPlayers().remove(player);
         teamRepository.save(team);
