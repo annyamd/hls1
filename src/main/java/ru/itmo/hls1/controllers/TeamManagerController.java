@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.hls1.model.dto.TeamDTO;
@@ -27,6 +28,7 @@ public class TeamManagerController {
     private final TeamService teamService;
 
     @GetMapping(value = "/")
+    @PreAuthorize("hasRole('TEAM_MANAGER')")
     public ResponseEntity<?> getAllTeamManagers(@RequestParam(value = "page", defaultValue = "0") @Min(value = 0, message = MSG_PAGE_NEGATIVE) int page,
                                                 @RequestParam(value = "size", defaultValue = "5") @Min(value = 0, message = MSG_SIZE_NEGATIVE) @Max(value = 50, message = MSG_SIZE_TOO_BIG) int size
     ) {
@@ -57,6 +59,7 @@ public class TeamManagerController {
     }
 
     @PutMapping(value = "/{managerId}")
+    @PreAuthorize("hasRole('TEAM_MANAGER')")
     public ResponseEntity<?> updateTeamManager(
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId,
             @Valid @RequestBody TeamManagerDTO managerDto
@@ -76,6 +79,7 @@ public class TeamManagerController {
     }
 
     @DeleteMapping(value = "/{managerId}/teams/{teamId}")
+    @PreAuthorize("hasRole('TEAM_MANAGER')")
     public ResponseEntity<?> deleteTeam(
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId,
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId
@@ -85,6 +89,7 @@ public class TeamManagerController {
     }
 
     @PutMapping(value = "/{managerId}/teams/{teamId}")
+    @PreAuthorize("hasRole('TEAM_MANAGER')")
     public ResponseEntity<?> updateTeam(
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long managerId,
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId,

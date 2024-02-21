@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.hls1.model.dto.BookingDTO;
@@ -44,6 +45,7 @@ public class TeamController {
 
     //only supervisor
     @DeleteMapping(value = "/{teamId}")
+    @PreAuthorize("hasRole('SUPERVISOR')")
     public ResponseEntity<?> deleteTeam(
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId
     ) {
@@ -53,6 +55,7 @@ public class TeamController {
 
     //only supervisor
     @PutMapping(value = "/{teamId}")
+    @PreAuthorize("hasRole('SUPERVISOR')")
     public ResponseEntity<?> updateTeam(
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long teamId,
             @Valid @RequestBody TeamDTO teamDTO

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.hls1.model.dto.PlaygroundDTO;
@@ -41,12 +42,14 @@ public class PlaygroundController {
     }
 
     @PostMapping(value = "/")
+    @PreAuthorize("hasRole('EDITOR')")
     public ResponseEntity<?> createPlayground(@Valid @RequestBody PlaygroundDTO playground) {
         PlaygroundDTO created = playgroundService.createPlayground(playground);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{playgroundId}")
+    @PreAuthorize("hasRole('EDITOR')")
     public ResponseEntity<?> updatePlayground(
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playgroundId,
             @Valid @RequestBody PlaygroundDTO playground
@@ -56,6 +59,7 @@ public class PlaygroundController {
     }
 
     @DeleteMapping("/{playgroundId}")
+    @PreAuthorize("hasRole('EDITOR')")
     public ResponseEntity<?> deletePlayground(
             @PathVariable @Min(value = 0, message = MSG_ID_NEGATIVE) long playgroundId
     ) {
