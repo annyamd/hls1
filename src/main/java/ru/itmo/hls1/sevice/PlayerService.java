@@ -35,11 +35,11 @@ public class PlayerService extends GeneralService<Player, PlayerDTO> {
         long id = dto.getUserId();
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("id = " + id));
-        if (user.getRoles().contains(Role.PLAYER)) {
-            throw new RoleAlreadyGrantedException(id, Role.PLAYER);
+        if (user.getRoles().contains(Role.ROLE_PLAYER)) {
+            throw new RoleAlreadyGrantedException(id, Role.ROLE_PLAYER);
         }
         PlayerDTO createdDto = super.create(dto);
-        user.getRoles().add(Role.PLAYER);
+        user.getRoles().add(Role.ROLE_PLAYER);
         userRepository.save(user);
         return createdDto;
     }
@@ -48,7 +48,7 @@ public class PlayerService extends GeneralService<Player, PlayerDTO> {
     public void delete(long id) {
         User user = getEntityById(id).getUser();
         super.delete(id);
-        user.getRoles().remove(Role.PLAYER);
+        user.getRoles().remove(Role.ROLE_PLAYER);
         userRepository.save(user);
     }
 

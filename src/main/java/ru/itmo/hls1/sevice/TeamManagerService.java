@@ -29,11 +29,11 @@ public class TeamManagerService extends GeneralService<TeamManager, TeamManagerD
         long id = dto.getUserId();
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("id = " + id));
-        if (user.getRoles().contains(Role.TEAM_MANAGER)) {
-            throw new RoleAlreadyGrantedException(id, Role.TEAM_MANAGER);
+        if (user.getRoles().contains(Role.ROLE_TEAM_MANAGER)) {
+            throw new RoleAlreadyGrantedException(id, Role.ROLE_TEAM_MANAGER);
         }
         TeamManagerDTO createdDto = super.create(dto);
-        user.getRoles().add(Role.TEAM_MANAGER);
+        user.getRoles().add(Role.ROLE_TEAM_MANAGER);
         userRepository.save(user);
         return createdDto;
     }
@@ -42,7 +42,7 @@ public class TeamManagerService extends GeneralService<TeamManager, TeamManagerD
     public void delete(long id) {
         User user = getEntityById(id).getUser();
         super.delete(id);
-        user.getRoles().remove(Role.TEAM_MANAGER);
+        user.getRoles().remove(Role.ROLE_TEAM_MANAGER);
         userRepository.save(user);
     }
 

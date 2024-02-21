@@ -59,12 +59,12 @@ public class UserService extends GeneralService<User, UserDTO> implements UserDe
         User user = getEntityById(id);
         Role role = roleDTO.getRole();
         switch (role) {
-            case PLAYER -> {
+            case ROLE_PLAYER -> {
                 Player player = playerRepository.findByUser_UserId(id)
                         .orElseThrow(() -> new PlayerNotFoundException("user id = " + id));
                 playerRepository.delete(player);
             }
-            case TEAM_MANAGER -> {
+            case ROLE_TEAM_MANAGER -> {
 
             }
         }
@@ -82,7 +82,7 @@ public class UserService extends GeneralService<User, UserDTO> implements UserDe
 
     private boolean isRoleNotAllowedGrantManually(Role role) {
         switch (role) {
-            case PLAYER, TEAM_MANAGER -> {
+            case ROLE_PLAYER, ROLE_TEAM_MANAGER -> {
                 return true;
             }
         }

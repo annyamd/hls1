@@ -1,8 +1,8 @@
 package ru.itmo.hls1.model.entity;
 
 public enum Role {
-    SUPERVISOR,
-    EDITOR,
-    PLAYER,
-    TEAM_MANAGER
+    ROLE_SUPERVISOR,
+    ROLE_EDITOR,
+    ROLE_PLAYER,
+    ROLE_TEAM_MANAGER
 }
