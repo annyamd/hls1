@@ -19,6 +19,7 @@ import ru.itmo.hls1.repository.TeamRepository;
 import ru.itmo.hls1.sevice.util.GeneralService;
 import ru.itmo.hls1.sevice.util.Mapper;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -42,12 +43,21 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
             throw new PlaygroundNotAvailableException(playground.getId());
         }
 
+        int size = 1;
+        if (dto.getPlayerId() == null && dto.getTeamId() != null) {
+            Team team = teamRepository.findById(dto.getTeamId())
+                    .orElseThrow(() -> new TeamNotFoundException("id = " + dto.getTeamId()));
+            size = team.getTeamSize().intValue();
+        }
+
         checkTimeForBooking(
-                playground.getId(),
+                playground,
+                dto.getDate(),
                 playground.getPlaygroundAvailability().getAvailableFrom(),
                 playground.getPlaygroundAvailability().getAvailableTo(),
                 dto.getStartTime(),
-                dto.getEndTime()
+                dto.getEndTime(),
+                size
         );
 
         return super.create(dto);
@@ -71,10 +81,8 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
                 .toList();
     }
 
-//    private void checkSpace
-
-    private void checkTimeForBooking(long pgId, LocalTime pgStartTime, LocalTime pgEndTime,
-                                     LocalTime bookStartTime, LocalTime bookEndTime) {
+    private void checkTimeForBooking(Playground playground, LocalDate date, LocalTime pgStartTime, LocalTime pgEndTime,
+                                     LocalTime bookStartTime, LocalTime bookEndTime, int size) {
         if (bookStartTime.isAfter(bookEndTime)) {
             throw new InvalidBookingTimeException("start time must be earlier than end time");
         }
@@ -94,14 +102,28 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
             throw new InvalidBookingTimeException("too big period of time");
         }
 
-        List<Booking> bookings = bookingRepository.findByPlayground_Id(pgId);
+        List<Booking> bookings = bookingRepository.findByPlayground_Id(playground.getId());
+
+        int capacity = playground.getPlaygroundAvailability().getCapacity();
+        final int[] curCount = new int[1];
+        curCount[0] = size;
+
         bookings
                 .forEach(it -> {
-                    LocalTime start = it.getStartTime();
-                    LocalTime end = it.getEndTime();
-                    if (start.isAfter(bookStartTime) && start.isBefore(bookEndTime)
-                            || end.isBefore(bookEndTime) && end.isAfter(start)) {
-                        throw new InvalidBookingTimeException("intersection with existing booking (" + start + "-" + end + ")");
+                    if (date.isEqual(it.getDate())) {
+                        LocalTime start = it.getStartTime();
+                        LocalTime end = it.getEndTime();
+                        if (start.isAfter(bookStartTime) && start.isBefore(bookEndTime)
+                                || end.isBefore(bookEndTime) && end.isAfter(start)) {
+                            if (it.getPlayer() != null) {
+                                curCount[0] += 1;
+                            } else if (it.getTeam() != null) {
+                                curCount[0] += it.getTeam().getTeamSize();
+                            }
+                            if (curCount[0] > capacity) {
+                                throw new InvalidBookingTimeException("no space in chosen playground");
+                            }
+                        }
                     }
                 });
     }
