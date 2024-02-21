@@ -32,8 +32,8 @@ public class SecurityConfig {
                 // Настройка доступа к конечным точкам
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/plain_hello", "/admin_hello").authenticated()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/auth/*").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(
                         manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
