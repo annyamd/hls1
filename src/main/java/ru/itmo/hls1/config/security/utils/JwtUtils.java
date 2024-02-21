@@ -1,6 +1,7 @@
 package ru.itmo.hls1.config.security.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -13,7 +14,6 @@ import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -35,32 +35,9 @@ public class JwtUtils {
         return generateToken(userDetails, claims);
     }
 
-    public boolean isValid(String token, UserDetails userDetails) {
-        String userName = extractUserName(token);
-        List<String> roles = extractUserRoles(token);
-
-        if (!userName.equals(userDetails.getUsername()))
-            return false;
-
-        if (isTokenExpired(token))
-            return false;
-
-        // TODO implement roles validation
-
-        return true;
-    }
     public String extractUserName(String token) {
         return extractAllClaims(token).getSubject();
     }
-
-    public List<String> extractUserRoles(String token) {
-        return extractAllClaims(token).get("roles", List.class);
-    }
-
-    public Date extractExpirationDate(String token) {
-        return extractAllClaims(token).getExpiration();
-    }
-
 
     private String generateToken(UserDetails userDetails, Map<String, Object> extraClaims) {
         var issuedDate = new Date();
@@ -75,15 +52,11 @@ public class JwtUtils {
                 .compact();
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpirationDate(token).before(new Date());
-    }
-
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) throws JwtException {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
-                .parseSignedClaims(token)
+                .parseSignedClaims(token)     // ExpiredJwtException, SignatureException, JwtException
                 .getPayload();
     }
 
