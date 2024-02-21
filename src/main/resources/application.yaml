@@ -1,9 +1,9 @@
 spring:
     datasource:
         driverClassName: org.postgresql.Driver
-        url: jdbc:postgresql://localhost:5432/mydb
-        username: postgres
-        password: 12345a
+        url: jdbc:postgresql://${PG_IP}:${PG_PORT}/${PG_DATABASE}
+        username: ${PG_USERNAME}
+        password: ${PG_PASSWORD}
     jpa:
         hibernate:
             ddl-auto: validate
@@ -12,7 +12,7 @@ spring:
             hibernate:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
 server:
-    port: 8090
+    port: ${APP_PORT}
 
 jwt:
     secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf

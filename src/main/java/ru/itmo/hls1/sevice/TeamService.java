@@ -3,10 +3,9 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import ru.itmo.hls1.controllers.exceptions.PlayerAlreadyInTeamException;
-import ru.itmo.hls1.controllers.exceptions.PlayerNotInTeamException;
-import ru.itmo.hls1.controllers.exceptions.TeamManagerNotHisTeamException;
-import ru.itmo.hls1.controllers.exceptions.TeamNoSpaceException;
+import ru.itmo.hls1.controllers.exceptions.already_applied.PlayerAlreadyInTeamException;
+import ru.itmo.hls1.controllers.exceptions.unavailable_action.TeamManagerNotHisTeamException;
+import ru.itmo.hls1.controllers.exceptions.unavailable_action.TeamNoSpaceException;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlayerNotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.TeamManagerNotFoundException;
@@ -21,7 +20,6 @@ import ru.itmo.hls1.repository.TeamRepository;
 import ru.itmo.hls1.sevice.util.GeneralService;
 import ru.itmo.hls1.sevice.util.Mapper;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +37,7 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
 
     //    by team manager (team controller)
 //    by player himself (player controller)
-    public TeamDTO addMember(long teamId, long playerId, long teamManagerId) {
+    public void addMember(long teamId, long playerId, long teamManagerId) {
         Team team = getEntityById(teamId);
         Player player = playerRepository.findById(playerId)
                 .orElseThrow(() -> new PlayerNotFoundException("id = " + playerId));
@@ -47,17 +45,16 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
             throw new TeamManagerNotHisTeamException(teamId, teamManagerId);
         }
         if (team.getTeamSize() == team.getPlayers().size()) {
-            throw new TeamNoSpaceException();
+            throw new TeamNoSpaceException(teamId);
         }
         if (team.getPlayers().contains(player)) {
-            throw new PlayerAlreadyInTeamException();
+            throw new PlayerAlreadyInTeamException(playerId, teamId);
         }
         team.getPlayers().add(player);
         teamRepository.save(team);
-        return mapper.entityToDto(team);
     }
 
-    public TeamDTO removeMember(long teamId, long playerId, long teamManager) {
+    public void removeMember(long teamId, long playerId, long teamManager) {
         Team team = getEntityById(teamId);
         Player player = playerRepository.findById(playerId)
                 .orElseThrow(() -> new PlayerNotFoundException("id = " + playerId));
@@ -65,10 +62,28 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
             throw new TeamManagerNotHisTeamException(teamId, teamManager);
         }
         if (!team.getPlayers().contains(player)) {
-            throw new PlayerNotInTeamException("", "");
+            throw new PlayerNotFoundException("id = " + playerId + ", teamId = " + teamId);
         }
         team.getPlayers().remove(player);
         teamRepository.save(team);
+    }
+
+    public List<TeamDTO> getAllTeamsByManager(long managerId) {
+        TeamManager manager = teamManagerRepository.findById(managerId)
+                .orElseThrow(() -> new TeamManagerNotFoundException("id = " + managerId));
+        return manager.getTeams()
+                .stream()
+                .map(mapper::entityToDto)
+                .toList();
+    }
+
+    public TeamDTO getTeamByManager(long managerId, long teamId) {
+        teamManagerRepository.findById(managerId)
+                .orElseThrow(() -> new TeamManagerNotFoundException("id = " + managerId));
+        Team team = getEntityById(teamId);
+        if (team.getManager().getTeamManagerId() != managerId) {
+            throw new TeamManagerNotHisTeamException(managerId, teamId);
+        }
         return mapper.entityToDto(team);
     }
 
@@ -80,6 +95,12 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
         updated.setBookingList(found.getBookingList());
         teamRepository.save(updated);
         return mapper.entityToDto(updated);
+    }
+
+    public void delete(long managerId, long id) {
+        teamManagerRepository.findById(managerId)
+                .orElseThrow(() -> new TeamManagerNotFoundException("id = " + managerId));
+        super.delete(id);
     }
 
     public List<TeamDTO> getTeamsByPlayer(long playerId) {
@@ -133,7 +154,7 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
             Set<Player> players;
             if (dto.getPlayersId() != null) {
                 if (size < dto.getPlayersId().size()) {
-                    throw new TeamNoSpaceException();
+                    throw new TeamNoSpaceException(-1);
                 }
                 players = new HashSet<>(playerRepository.findAllById(dto.getPlayersId()));
                 if (players.size() != dto.getPlayersId().size()) {
