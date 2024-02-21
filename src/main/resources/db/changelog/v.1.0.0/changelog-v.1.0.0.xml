@@ -10,4 +10,6 @@
     <include file="2024-02-10-insert-test-data-pg.xml" relativeToChangelogFile="true"/>
     <include file="2024-02-12-insert-test-data-player-tm.xml" relativeToChangelogFile="true"/>
 
+    <include file="2024-02-21-change-gender-type.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>
