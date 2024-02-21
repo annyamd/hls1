@@ -3,6 +3,7 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.SportNotFoundException;
 import ru.itmo.hls1.model.dto.SportDTO;
@@ -19,6 +20,7 @@ public class SportService extends GeneralService<Sport, SportDTO> {
     private final SportRepository sportRepository;
     private final Mapper<Sport, SportDTO> mapper = new SportMapper();
 
+    @Transactional
     public SportDTO updateSport(long id, SportDTO dto) {
         getEntityById(id);
         Sport updated = mapper.dtoToEntity(dto);

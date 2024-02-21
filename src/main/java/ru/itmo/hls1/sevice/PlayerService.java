@@ -3,6 +3,7 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itmo.hls1.controllers.exceptions.unavailable_action.TeamClosedException;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlaygroundNotFoundException;
@@ -52,6 +53,7 @@ public class PlayerService extends GeneralService<Player, PlayerDTO> {
         userRepository.save(user);
     }
 
+    @Transactional
     public PlayerDTO update(long id, PlayerDTO dto) {
         Player found = getEntityById(id);
         Player updated = mapper.dtoToEntity(dto);

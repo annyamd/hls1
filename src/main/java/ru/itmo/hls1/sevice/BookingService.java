@@ -3,6 +3,7 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itmo.hls1.controllers.exceptions.invalid.InvalidBookingTimeException;
 import ru.itmo.hls1.controllers.exceptions.unavailable_action.PlaygroundNotAvailableException;
 import ru.itmo.hls1.controllers.exceptions.invalid.NoBookingTargetException;
@@ -35,6 +36,7 @@ public class BookingService extends GeneralService<Booking, BookingDTO> {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
 
+    @Transactional
     @Override
     public BookingDTO create(BookingDTO dto) {
         Playground playground = playgroundRepository.findById(dto.getPlaygroundId())

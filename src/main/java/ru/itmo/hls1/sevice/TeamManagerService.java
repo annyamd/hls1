@@ -3,6 +3,7 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.TeamManagerNotFoundException;
 import ru.itmo.hls1.controllers.exceptions.not_found.UserNotFoundException;
@@ -24,6 +25,7 @@ public class TeamManagerService extends GeneralService<TeamManager, TeamManagerD
     private final UserRepository userRepository;
     private final Mapper<TeamManager, TeamManagerDTO> mapper = new TeamManagerMapper();
 
+    @Transactional
     @Override
     public TeamManagerDTO create(TeamManagerDTO dto) {
         long id = dto.getUserId();
@@ -46,6 +48,7 @@ public class TeamManagerService extends GeneralService<TeamManager, TeamManagerD
         userRepository.save(user);
     }
 
+    @Transactional
     public TeamManagerDTO update(long id, TeamManagerDTO dto) {
         TeamManager found = getEntityById(id);
         TeamManager updated = mapper.dtoToEntity(dto);

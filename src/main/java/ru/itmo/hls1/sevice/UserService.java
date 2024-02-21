@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itmo.hls1.config.security.wrappers.SecurityUser;
 import ru.itmo.hls1.controllers.exceptions.already_applied.UserAlreadyExistsException;
 import ru.itmo.hls1.controllers.exceptions.not_found.NotFoundException;
@@ -42,6 +43,7 @@ public class UserService extends GeneralService<User, UserDTO> implements UserDe
         return super.create(dto);
     }
 
+    @Transactional
     public void addRole(long id, RoleDTO roleDTO) {
         Role role = roleDTO.getRole();
         if (isRoleNotAllowedGrantManually(role)) {
@@ -55,6 +57,7 @@ public class UserService extends GeneralService<User, UserDTO> implements UserDe
         userRepository.save(user);
     }
 
+    @Transactional
     public void removeRole(long id, RoleDTO roleDTO) {
         User user = getEntityById(id);
         Role role = roleDTO.getRole();

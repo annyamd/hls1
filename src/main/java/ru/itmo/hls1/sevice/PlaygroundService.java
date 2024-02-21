@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itmo.hls1.controllers.exceptions.invalid.InvalidAvailabilityException;
 import ru.itmo.hls1.controllers.exceptions.not_found.PlaygroundNotFoundException;
 import ru.itmo.hls1.model.dto.*;
@@ -50,6 +51,7 @@ public class PlaygroundService {
         return pgMapper.entityToDto(playground);
     }
 
+    @Transactional
     public PlaygroundDTO updatePlayground(long id, PlaygroundDTO dto) {
         Playground found = playgroundRepository.findById(id)
                 .orElseThrow(() -> new PlaygroundNotFoundException("id = " + id));

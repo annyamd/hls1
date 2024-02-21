@@ -3,6 +3,7 @@ package ru.itmo.hls1.sevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itmo.hls1.controllers.exceptions.already_applied.PlayerAlreadyInTeamException;
 import ru.itmo.hls1.controllers.exceptions.unavailable_action.TeamManagerNotHisTeamException;
 import ru.itmo.hls1.controllers.exceptions.unavailable_action.TeamNoSpaceException;
@@ -37,6 +38,7 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
 
     //    by team manager (team controller)
 //    by player himself (player controller)
+    @Transactional
     public void addMember(long teamId, long playerId, long teamManagerId) {
         Team team = getEntityById(teamId);
         Player player = playerRepository.findById(playerId)
@@ -54,6 +56,7 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
         teamRepository.save(team);
     }
 
+    @Transactional
     public void removeMember(long teamId, long playerId, long teamManager) {
         Team team = getEntityById(teamId);
         Player player = playerRepository.findById(playerId)
@@ -87,6 +90,7 @@ public class TeamService extends GeneralService<Team, TeamDTO> {
         return mapper.entityToDto(team);
     }
 
+    @Transactional
     public TeamDTO update(long teamId, TeamDTO dto) {
         Team found = getEntityById(teamId);
         Team updated = mapper.dtoToEntity(dto);
